@@ -1,7 +1,16 @@
-# sample.md
+# 2310-set-for-the-c++-environemnt-with-VisualC.md
 
-## Set for the C++ Environment
+## ## Questons
+- [ ] Visual C++ のincludeができない。
+  - `C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\include`
+  
+- 
 
-- hello
+## overview
+
+
+
+
+
 
 -end of file-
