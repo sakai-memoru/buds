@@ -1,0 +1,111 @@
+/* @theme custom */
+@import "default";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap");
+
+section {
+    color: darkslategray;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 20px;
+    line-height: 1.6;
+    padding-bottom: 1em;
+}
+section.lead {
+    font-size: 20px;
+}
+section.lead h1 {
+    font-size: 2.2rem;
+    color: #004c99;
+}
+section.lead h2 {
+    font-size: 1.6rem;
+}
+section.lead h3 {
+    font-size: 1.4rem;
+}
+section.lead li {
+    font-size: 1.4rem;
+    margin-bottom: 0.5em;
+}
+
+div.author {
+    text-align: right;
+    font-size: 30px;
+    color: #7f7f7f;
+    font-weight: bold;
+    position: absolute;
+    bottom: 10%;
+    right: 3%;
+}
+
+section.lead div.sbody {
+    position: absolute;
+    top: 140px;
+    left: 85px;
+    right: 30px;
+}
+
+strong {
+    color: darkcyan;
+}
+
+h1 {
+    font-size: 2.2em;
+    color: darkblue;
+    padding-bottom: 10px;
+    margin-top: 0.5em;
+}
+
+h2 {
+    position: absolute;
+    top: 80px;
+    left: 75px;
+    right: 30px;
+    font-size: 2.2em;
+    border-bottom: 4px solid #4caf50;
+}
+ul {
+    font-size: 1.1em;
+    line-height: 1.2;
+}
+li {
+    font-size: 1em;
+    line-height: 1.2;
+}
+li strong {
+    color: darkblue; /* Dark blue */
+}
+blockquote {
+    font-size: 1.4em;
+    color: darkslategray; /* Deep Orange */
+    border-left: 4px solid darkgreen;
+    padding-left: 20px;
+}
+
+section mjx-container {
+    color: #5e80ad;
+}
+
+section table {
+    margin: 10px auto;
+}
+
+section table td {
+    font-size: 1.2em;
+    text-align: center;
+}
+
+section table td img {
+    display: block;
+    margin: 0 auto;
+}
+
+section table th {
+    font-size: 1.4em;
+    background-color: var(--background-theme);
+}
+
+header {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.1em;
+}
