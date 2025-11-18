@@ -1,0 +1,80 @@
+## ## Questions
+- What editors and tools I will use?
+	- Editors
+		- Journey - JOURNAL
+		- Keep - CARD
+			- Post-It App - STICKY
+			- Zenn Scrap
+			- ほぼ日
+		- Obsidian - LEAF : Anyway write something
+			- Mindomo - MAP
+		- Workflowy - TOC
+		- Google Slides - INDEX CARD
+		- Google Docs - PAGE (DRAFT)
+			- Used For Notebook LM, Gemini Canvas 
+		- Visual Studio Code - SCRIPT
+			- Cursorに乗り換える
+		- その他データ加工等に利用
+			- Mery
+			- Cassava
+			- SimpleNote
+		- AI評価
+			- Copilot
+			- Gemini
+	- Logging
+		- ほぼ日
+			- url
+				- Hatena BM
+			- Photo
+		- Sleep
+		- Scale
+		- Book Meter
+		- Kindle
+		- Toggl Track
+		- ChocoZap
+		- Habits
+		- Quezlet
+		- NHK Radio
+	- Hand-writings
+		- WG-S50/WG-PN1 - 7 Inch, just under B6 size
+		- iFlytek AI Note -  8.2 inch, just under A5 size
+		- Amazon Fire HD 10 - 10.1 inch under B5 size
+		- HAUWEI MatePad 11 - 11 inch under B5 size
+		- PC/ALLDOCUBE - Main 12.1 inch, just above B5 size
+			- GoodNotes
+			- OneNote
+			- Whiteboard
+		- QUADERNO A4 - Print out, A4 notes 13.3 Inch just like A4
+	- Management of images and drawings 
+		- Keep - CARD
+		- ｘTile - INDEX
+	- Other Devices 
+		- POMERA DM100
+		- SOURCENEXT AutoMemo
+	- POST - Scripts and Articles
+		- 知恵袋
+		- 読書メータ
+		- Note.com
+			- Linked In
+			- Zenn.dev
+			- Hateblog
+		- SNS
+			- X
+			- Threads
+			- Tumblr
+			- Upldr
+
+- What Does Sakai want to make a sort of markdowns ?
+	- ✓  知恵袋向けのDraft - Markdown Slides
+		- Mindomo, Geminiで管理する
+			- Draft：Mindomoで作成する
+			- Slide-Formed Markdown：Geminiで作成する
+			- Google Slides ：Gemini Canvasで作成する
+			- Story book ：Gemini Gem Story bookで作成する
+	- ✓ Diary、雑感：Journey - Tumblr
+		- Journeyで管理する
+	- ✓ 日々のログ：ほぼ日
+		- 知恵袋への投稿（Google Slideのリンク）
+		- 今日のYoutube・・・見たモノでおすすめを残す
+		- 
+		
