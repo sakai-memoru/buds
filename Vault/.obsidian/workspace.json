@@ -13,31 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2511B-How to use Obsidian Apps.md",
+                "file": "2025-11-21.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2511B-How to use Obsidian Apps"
+              "title": "2025-11-21"
             }
-          }
-        ]
-      },
-      {
-        "id": "dea3a7d719de7344",
-        "type": "tabs",
-        "children": [
+          },
           {
-            "id": "f792f1c4cc6b4105",
+            "id": "4b6c24fe7bc328e2",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "2511C-Journey.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2511C-Journey"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -185,9 +184,16 @@
       "bases:Create new base": false
     }
   },
-  "active": "fa3fdb0650feb2ce",
+  "active": "4b6c24fe7bc328e2",
   "lastOpenFiles": [
-    "Index.md",
-    "2511B-How to use Obsidian Apps.md"
+    "2025-11-21.md",
+    "2511C-English new grammer.html",
+    "2511C-English new grammer.md",
+    "2025-11-20-Nodes.md",
+    "2511B-How to use Obsidian Apps.md",
+    "Handwrittens.md",
+    "2511C-Journey.md",
+    "Untitled.canvas",
+    "Index.md"
   ]
 }

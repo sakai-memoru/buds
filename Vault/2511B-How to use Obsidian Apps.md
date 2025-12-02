@@ -1,7 +1,7 @@
 ## ## Questions
 - What editors and tools I will use?
 	- Editors
-		- Journey - JOURNAL
+		- Journey - JOURNAL [[journey]] - [[2511C-Journey]]
 		- Keep - CARD
 			- Post-It App - STICKY
 			- Zenn Scrap

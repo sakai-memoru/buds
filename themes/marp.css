@@ -90,7 +90,7 @@ section table {
 }
 
 section table td {
-    font-size: 1.2em;
+    font-size: 1.1em;
     text-align: center;
 }
 
@@ -100,7 +100,7 @@ section table td img {
 }
 
 section table th {
-    font-size: 1.4em;
+    font-size: 1.2em;
     background-color: var(--background-theme);
 }
 
