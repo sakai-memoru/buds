@@ -4,9 +4,12 @@
 - Publish wiki or drafting
 
 ## GitHub Pages
-- https://sakai-memoru.github.io/www2/
+- https://sakai-memoru.github.io/buds/
 
-## www2.wiki
-- https://github.com/sakai-memoru/www2/wiki
+## buds.wiki
+- https://github.com/sakai-memoru/buds/wiki
+
+## buds/issues
+- https://github.com/sakai-memoru/buds/issues
 
 // ---- end
