@@ -8,35 +8,20 @@
         "type": "tabs",
         "children": [
           {
-            "id": "fa3fdb0650feb2ce",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "2025-11-21.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2025-11-21"
-            }
-          },
-          {
             "id": "4b6c24fe7bc328e2",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2511C-Journey.md",
+                "file": "2025-11-20-Nodes.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2511C-Journey"
+              "title": "2025-11-20-Nodes"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -187,13 +172,13 @@
   "active": "4b6c24fe7bc328e2",
   "lastOpenFiles": [
     "2025-11-21.md",
-    "2511C-English new grammer.html",
-    "2511C-English new grammer.md",
     "2025-11-20-Nodes.md",
-    "2511B-How to use Obsidian Apps.md",
-    "Handwrittens.md",
     "2511C-Journey.md",
+    "2511C-English new grammer.md",
+    "Handwrittens.md",
+    "Index.md",
     "Untitled.canvas",
-    "Index.md"
+    "2511C-English new grammer.html",
+    "2511B-How to use Obsidian Apps.md"
   ]
 }
