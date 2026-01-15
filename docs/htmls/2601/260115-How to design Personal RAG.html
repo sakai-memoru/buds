@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal RAG Strategy for Researchers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            border-bottom: 2px solid #f1f5f9;
+            position: relative;
+            overflow: hidden;
+        }
+        @media print {
+            .slide {
+                page-break-after: always;
+                border-bottom: none;
+                min-height: 100vh;
+            }
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.5;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-900">
+
+    <!-- Slide 1: Title -->
+    <section class="slide bg-slate-900 text-white text-center">
+        <div class="max-w-5xl mx-auto relative z-10">
+            <p class="text-blue-400 font-bold tracking-[0.2em] mb-6 uppercase">Next Generation Knowledge Management</p>
+            <h1 class="text-5xl md:text-7xl font-bold mb-10 leading-tight">
+                対話から知見を構造化する<br>
+                <span class="gradient-text">Personal RAGの設計論</span>
+            </h1>
+            <div class="h-1 w-32 bg-blue-600 mx-auto mb-10"></div>
+            <p class="text-xl text-slate-400">生成AIを「情報の検索」から「思考プロトコルの再現」へ</p>
+        </div>
+    </section>
+
+    <!-- Slide 2: Introduction -->
+    <section class="slide">
+        <div class="bg-pattern"></div>
+        <div class="max-w-5xl mx-auto w-full">
+            <h2 class="text-3xl font-bold mb-16 border-l-8 border-blue-600 pl-6">Introduction: 核心的な問い</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="bg-white p-10 rounded-3xl shadow-xl border border-slate-100">
+                    <span class="inline-block px-4 py-1 bg-blue-100 text-blue-700 font-bold rounded-full text-sm mb-6">QUESTION</span>
+                    <p class="text-2xl font-bold leading-relaxed text-slate-800">
+                        生成AIで利用できる知識ルールを、どのように<strong>RAGとして整備・運用</strong>すべきか？
+                    </p>
+                </div>
+                <div class="bg-blue-600 p-10 rounded-3xl shadow-2xl text-white transform md:translate-y-12">
+                    <span class="inline-block px-4 py-1 bg-blue-500 text-blue-100 font-bold rounded-full text-sm mb-6">ANSWER</span>
+                    <p class="text-2xl font-bold leading-relaxed">
+                        今までの対話内容から<strong>「事実」と「思考アルゴリズム」</strong>を抽出し、それらを分離して構造化すること。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 3: Status Quo -->
+    <section class="slide bg-slate-50">
+        <div class="max-w-5xl mx-auto w-full">
+            <h2 class="text-3xl font-bold mb-12 border-l-8 border-slate-800 pl-6">現状認識：情報整理の「壁」</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-red-500">
+                    <h3 class="font-bold text-red-600 mb-4">情報のフラット化</h3>
+                    <p class="text-slate-600">重要な<strong>判断基準</strong>が、膨大な事実ログの中に埋没してしまい、AIが適切に重み付けできない。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-red-500">
+                    <h3 class="font-bold text-red-600 mb-4">文脈の断片化</h3>
+                    <p class="text-slate-600">一貫した<strong>推論パターン</strong>がルール化されていないため、AIの回答がその場しのぎの要約に留まる。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-red-500">
+                    <h3 class="font-bold text-red-600 mb-4">暗黙知のブラックボックス</h3>
+                    <p class="text-slate-600">専門家（SE等）が無意識に行っている<strong>「推論のステップ」</strong>が言語化されず、共有不可能な状態。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: Description (Framework) -->
+    <section class="slide">
+        <div class="max-w-6xl mx-auto w-full">
+            <h2 class="text-3xl font-bold mb-16 border-l-8 border-blue-600 pl-6">解決策：知能の2層構造モデル</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 h-auto">
+                <!-- Data Layer -->
+                <div class="flex flex-col bg-slate-50 p-8 rounded-3xl border border-slate-200">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold mr-4 shadow-lg">01</div>
+                        <h3 class="text-2xl font-bold text-slate-800">知識層 (Knowledge Base)</h3>
+                    </div>
+                    <div class="space-y-3 flex-grow">
+                        <div class="bg-white p-4 rounded-xl border-l-4 border-blue-400 shadow-sm font-medium">ヒアリングログ・議事録</div>
+                        <div class="bg-white p-4 rounded-xl border-l-4 border-blue-400 shadow-sm font-medium">技術仕様書・APIリファレンス</div>
+                        <div class="bg-white p-4 rounded-xl border-l-4 border-blue-400 shadow-sm font-medium">業界標準のドキュメント</div>
+                    </div>
+                    <div class="mt-6 p-4 bg-blue-100 rounded-xl text-sm text-blue-800 italic">
+                        <strong>役割:</strong> AIが「何について」語るかの素材。動的な事実情報のストック。
+                    </div>
+                </div>
+
+                <!-- Rule Layer -->
+                <div class="flex flex-col bg-slate-900 p-8 rounded-3xl shadow-2xl text-white">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-purple-500 text-white rounded-xl flex items-center justify-center font-bold mr-4 shadow-lg">02</div>
+                        <h3 class="text-2xl font-bold text-white">推論層 (Instruction Rules)</h3>
+                    </div>
+                    <div class="space-y-3 flex-grow">
+                        <div class="bg-slate-800 p-4 rounded-xl border-l-4 border-purple-400 shadow-sm font-medium">思考のプロトコル (IF-THEN)</div>
+                        <div class="bg-slate-800 p-4 rounded-xl border-l-4 border-purple-400 shadow-sm font-medium">Few-Shot テンプレート</div>
+                        <div class="bg-slate-800 p-4 rounded-xl border-l-4 border-purple-400 shadow-sm font-medium">SE特有のチェックリスト</div>
+                    </div>
+                    <div class="mt-6 p-4 bg-purple-900/50 rounded-xl text-sm text-purple-200 italic">
+                        <strong>役割:</strong> AIが「どのように」解釈するかの知能。思考の癖の言語化。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Visualization (Grid) -->
+    <section class="slide bg-slate-50">
+        <div class="max-w-5xl mx-auto w-full">
+            <h2 class="text-3xl font-bold mb-12 border-l-8 border-blue-600 pl-6">実用例：情報のマッピング</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <h4 class="text-xl font-bold text-blue-700">1. ヒアリング内容の整理</h4>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <pre class="text-sm bg-slate-800 text-slate-300 p-4 rounded-lg">## 顧客要望 (Input)
+- 現場は手袋で操作
+- 通信環境が不安定
+- セキュリティ最優先</pre>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="text-xl font-bold text-purple-700">2. 推論ルールの適用</h4>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex flex-col gap-3 text-sm">
+                            <div class="flex items-center gap-2"><span class="w-2 h-2 bg-purple-500 rounded-full"></span> <strong>IF:</strong> 操作制約 <strong>THEN:</strong> スキャン入力</div>
+                            <div class="flex items-center gap-2"><span class="w-2 h-2 bg-purple-500 rounded-full"></span> <strong>IF:</strong> 不安定通信 <strong>THEN:</strong> オフライン同期</div>
+                            <div class="flex items-center gap-2"><span class="w-2 h-2 bg-purple-500 rounded-full"></span> <strong>IF:</strong> セキュリティ <strong>THEN:</strong> 多要素認証</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Result Output (Visual Table) -->
+            <div class="mt-12 bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden">
+                <div class="bg-slate-800 text-white px-8 py-4 font-bold flex justify-between items-center">
+                    <span>生成される仕様書のイメージ (Output)</span>
+                    <span class="text-xs text-slate-400">Powered by Structural RAG</span>
+                </div>
+                <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <span class="text-xs text-blue-600 font-bold block mb-2">機能定義</span>
+                        <p class="text-sm">バーコード入力機能</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <span class="text-xs text-blue-600 font-bold block mb-2">非機能要件</span>
+                        <p class="text-sm">PWA + IndexedDB</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <span class="text-xs text-blue-600 font-bold block mb-2">DB設計</span>
+                        <p class="text-sm">暗号化カラムの定義</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: Conclusion -->
+    <section class="slide">
+        <div class="max-w-4xl mx-auto w-full text-center">
+            <h2 class="text-4xl font-bold mb-16">結論：Personal RAGの完成形</h2>
+            <p class="text-2xl leading-relaxed text-slate-700 mb-16">
+                RAGの真価は「知識の検索」ではなく、<br>
+                あなたの脳内にある<strong>「思考アルゴリズム」の外部化</strong>にある。
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-left">
+                <div class="p-8 bg-blue-50 rounded-2xl border-l-4 border-blue-600">
+                    <h4 class="font-bold text-xl mb-3">AIの「主観」を育てる</h4>
+                    <p class="text-slate-600 text-sm">客観的なデータに、あなたの<strong>主観（ルール）</strong>を掛け合わせることで、初めて「あなたらしい」回答が生成される。</p>
+                </div>
+                <div class="p-8 bg-purple-50 rounded-2xl border-l-4 border-purple-600">
+                    <h4 class="font-bold text-xl mb-3">ナレッジの資産化</h4>
+                    <p class="text-slate-600 text-sm">対話からルールを抽出し続けるプロセス自体が、あなたの<strong>専門知を構造化</strong>し、資産に変えていく。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 7: Supplement -->
+    <section class="slide bg-slate-900 text-white">
+        <div class="max-w-5xl mx-auto w-full">
+            <h2 class="text-3xl font-bold mb-12 border-l-8 border-blue-400 pl-6 text-white">補足：実装の第一歩</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h4 class="font-bold text-blue-400 mb-2">Step 1: ログのタグ付け</h4>
+                        <p class="text-sm text-slate-300">メモを取る際に、将来のルール化を見越して <strong>#Constraint</strong> <strong>#Decision</strong> などのメタデータを付与する。</p>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h4 class="font-bold text-blue-400 mb-2">Step 2: テンプレート化</h4>
+                        <p class="text-sm text-slate-300">「この場合は、こう考える」というペアを3つ作り、それを<strong>システムプロンプト</strong>に組み込む。</p>
+                    </div>
+                </div>
+                <div class="bg-blue-900/20 p-8 rounded-2xl border border-blue-500/30 flex flex-col justify-center">
+                    <h4 class="font-bold text-xl mb-4 text-center">推奨ツールセット</h4>
+                    <ul class="space-y-4">
+                        <li class="flex justify-between border-b border-blue-800/50 pb-2"><span>Markdown Editor</span> <span class="text-blue-400">Obsidian / Notion</span></li>
+                        <li class="flex justify-between border-b border-blue-800/50 pb-2"><span>Diagram Engine</span> <span class="text-blue-400">Mermaid.js</span></li>
+                        <li class="flex justify-between border-b border-blue-800/50 pb-2"><span>RAG Platform</span> <span class="text-blue-400">NotebookLM / Dify</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 8: Summary -->
+    <section class="slide bg-white text-slate-900">
+        <div class="bg-pattern"></div>
+        <div class="max-w-4xl mx-auto w-full text-center">
+            <h2 class="text-5xl font-bold mb-12 gradient-text italic">The Final Summary</h2>
+            <div class="p-12 bg-white shadow-2xl rounded-[3rem] border border-slate-100">
+                <p class="text-3xl leading-relaxed font-bold text-slate-800">
+                    知識は「データ」に宿り、<br>
+                    知恵は「ルール」に宿る。<br>
+                    <span class="text-blue-600 font-bold mt-4 block">両者を分離し、AIにあなたの「魂」を実装せよ。</span>
+                </p>
+            </div>
+            <p class="mt-16 text-slate-400 font-medium tracking-widest uppercase">End of Presentation</p>
+        </div>
+    </section>
+
+</body>
+</html>
