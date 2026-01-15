@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>知識を「オブジェクトと関係」で再設計する ─ DIKW・SECI・RDF・Personal RAG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;700&display=swap"
+    rel="stylesheet"
+  >
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: "Noto Sans JP", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    @media print {
+      .slide {
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-50 antialiased">
+
+  <!-- Slide 1: Title -->
+  <section class="slide min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-32">
+    <div class="max-w-4xl mx-auto">
+      <p class="text-sm tracking-[0.2em] uppercase text-sky-400 mb-4">Knowledge Design × Generative AI</p>
+      <h1 class="text-3xl md:text-5xl font-bold leading-tight mb-6">
+        知識を「オブジェクトと関係」で再設計する<br class="hidden md:block" />
+        ─ DIKW・SECI・RDF・Personal RAG の統合視点
+      </h1>
+      <p class="text-base md:text-lg text-slate-200 mb-8">
+        生成AI時代の研究者に求められるのは、単なる情報収集ではなく、
+        <strong>「知識をどのような構造で持ち、どのような思考アルゴリズムで扱うか」</strong>
+        を設計することです。
+      </p>
+      <div class="grid gap-4 md:grid-cols-3 text-sm md:text-base">
+        <div class="border border-slate-700 rounded-xl p-4 bg-slate-900/60">
+          <p class="text-slate-400 text-xs mb-1">Key Question</p>
+          <p class="font-medium">
+            知識・情報を、どのように<br />「Object」と「Relation」で表現しうるか？
+          </p>
+        </div>
+        <div class="border border-slate-700 rounded-xl p-4 bg-slate-900/60">
+          <p class="text-slate-400 text-xs mb-1">対象読者</p>
+          <p class="font-medium">
+            生成AI・知識構造化に関心のある<br />30〜40代の研究者・実務家
+          </p>
+        </div>
+        <div class="border border-slate-700 rounded-xl p-4 bg-slate-900/60">
+          <p class="text-slate-400 text-xs mb-1">本プレゼンのゴール</p>
+          <p class="font-medium">
+            DIKW・SECI・RDF・Personal RAG を<br />一つのフレームとして統合して理解する
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 2: 導入（Question / Answer） -->
+  <section class="slide min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-32 bg-slate-950">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-6">
+        導入：知識を「Object と Relation」で捉え直す
+      </h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="border border-slate-700 rounded-2xl p-6 bg-slate-900/70">
+          <h3 class="text-sm uppercase tracking-[0.2em] text-sky-400 mb-3">Question</h3>
+          <p class="text-base md:text-lg mb-4">
+            <strong>知識、情報を、Object と Relation で表現するとはどういうことか？</strong>
+          </p>
+          <ul class="list-disc list-inside text-sm md:text-base space-y-2 text-slate-200">
+            <li>知識を「モノ」と「モノの関係」として分解できるのか？</li>
+            <li>その構造は、生成AIやRAGとどのように接続しうるのか？</li>
+            <li>既存のフレーム（DIKW・SECI・RDF）と矛盾しないのか？</li>
+          </ul>
+        </div>
+        <div class="border border-slate-700 rounded-2xl p-6 bg-slate-900/70">
+          <h3 class="text-sm uppercase tracking-[0.2em] text-emerald-400 mb-3">Answer（方向性）</h3>
+          <p class="text-sm md:text-base mb-3">
+            これまでの対話で見えてきたのは、
+            <strong>「知識＝オブジェクトの集合」ではなく、「オブジェクトと関係のネットワーク」</strong>
+            として捉えるべきだ、という視点です。
+          </p>
+          <p class="text-sm md:text-base mb-3">
+            さらに、そのネットワークの上で動く
+            <strong>「思考アルゴリズム（推論ルール）」</strong>
+            と、
+            <strong>「知識ルール（事実のストック）」</strong>
+            を分離して設計することが、Personal RAG の中核になります。
+          </p>
+          <p class="text-sm md:text-base">
+            本プレゼンでは、この視点を
+            <strong>DIKW・SECI・RDF・Personal RAG</strong>
+            の4つの枠組みを通して整理します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 3: 現状認識 -->
+  <section class="slide min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-32 bg-slate-950">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-6">
+        現状認識：情報は増えたが、「構造」と「思考プロトコル」が追いついていない
+      </h2>
+      <div class="grid gap-6 md:grid-cols-[1.2fr,1fr]">
+        <div class="border border-slate-700 rounded-2xl p-6 bg-slate-900/70">
+          <h3 class="text-sm uppercase tracking-[0.2em] text-sky-400 mb-3">現状の課題</h3>
+          <ul class="list-disc list-inside text-sm md:text-base space-y-2">
+            <li>
+              生成AIにより、テキスト情報の生成・取得は容易になったが、
+              <strong>「知識としての構造化」</strong> は依然として人手に依存している。
+            </li>
+            <li>
+              多くのRAG実装は、
+              <strong>「検索精度」</strong> に焦点が当たり、
+              <strong>「思考アルゴリズムの設計」</strong> が軽視されがち。
+            </li>
+            <li>
+              DIKW・SECI・RDF といった既存の知識モデルが、
+              <strong>生成AI時代のワークフローに十分統合されていない。</strong>
+            </li>
+          </ul>
+        </div>
+        <div class="border border-slate-700 rounded-2xl p-6 bg-slate-900/70">
+          <h3 class="text-sm uppercase tracking-[0.2em] text-emerald-400 mb-3">研究者にとってのギャップ</h3>
+          <p class="text-sm md:text-base mb-3">
+            研究者は、既に豊富な知識モデルや理論を持っています。しかし、
+            <strong>「それを生成AIとどう接続するか」</strong>
+            という設計論は、まだ十分に整理されていません。
+          </p>
+          <p class="text-sm md:text-base">
+            本セッションでは、
+            <strong>「知識＝Object と Relation」</strong>
+            という視点を軸に、
+            既存モデルと生成AIを橋渡しする具体的なフレームを提示します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 4: 説明1 - DIKW × Personal RAG -->
+  <section class="slide min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-32 bg-slate-950">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-6">
+        DIKW × Personal RAG：知識と知恵を分離して設計する
+      </h2>
+
+      <div class="overflow-x-auto mb-6">
+        <table class="min-w-full text-sm md:text-base border border-slate-700 rounded-xl overflow-hidden">
+          <thead class="bg-slate-900/80">
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold text-slate-200">DIKW階層</th>
+              <th class="px-4 py-3 text-left font-semibold text-slate-200">内容</th>
+              <th class="px-4 py-3 text-left font-semibold text-slate-200">Personal RAG での対応</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800">
+            <tr class="bg-slate-900/40">
+              <td class="px-4 py-3 font-medium">Data（データ）</td>
+              <td class="px-4 py-3">観測された事実・値・ログなど</td>
+              <td class="px-4 py-3">
+                文書断片・APIレスポンス・ログなどの
+                <strong>生データ</strong>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium">Information（情報）</td>
+              <td class="px-4 py-3">文脈が付与されたデータ</td>
+              <td class="px-4 py-3">
+                セマンティックなタグ付けや、
+                <strong>RDF的な構造化</strong> を施した情報
+              </td>
+            </tr>
+            <tr class="bg-slate-900/40">
+              <td class="px-4 py-3 font-medium">Knowledge（知識）</td>
+              <td class="px-4 py-3">体系化された情報</td>
+              <td class="px-4 py-3">
+                <strong>知識ルール（Knowledge Base）</strong><br />
+                仕様書・設計書・ナレッジの集約
+              </td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium">Wisdom（知恵）</td>
+              <td class="px-4 py-3">判断・意思決定の原理</td>
+              <td class="px-4 py-3">
+                <strong>思考アルゴリズム（Instruction Rules）</strong><br />
+                IF–THEN、優先順位、解釈ルール
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2 text-sm md:text-base">
+        <div class="border border-slate-700 rounded-2xl p-4 bg-slate-900/70">
+          <h3 class="text-xs uppercase tracking-[0.2em] text-sky-400 mb-2">ポイント</h3>
+          <p>
+            Personal RAG では、
+            <strong>「Knowledge（知識）」と「Wisdom（知恵）」を明確に分離</strong>
+            します。
+            知識はストックとして、知恵は
+            <strong>思考アルゴリズムとして外部化</strong>
+            されます。
+          </p>
+        </div>
+        <div class="border border-slate-700 rounded-2xl p-4 bg-slate-900/70">
+          <h3 class="text-xs uppercase tracking-[0.2em] text-emerald-400 mb-2">Object と Relation の観点</h3>
+          <p>
+            Data〜Knowledge は主に
+            <strong>「Object（対象）」</strong>
+            の整理ですが、Wisdom は
+            <strong>「Object 間の Relation をどう解釈し、どう使うか」</strong>
+            のルールです。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 5: 説明2 - SECI × 思考アルゴリズム -->
+  <section class="slide min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-32 bg-slate-950">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-6">
+        SECI × 思考アルゴリズム：暗黙知を「推論ルール」として外部化する
+      </h2>
+
+      <div class="grid gap-6 md:grid-cols-4 text-xs md:text-sm mb-8">
+        <div class="border border-slate-700 rounded-2xl p-4 bg-slate-900/70 flex flex-col">
+          <h3 class="text-[0.65rem] uppercase tracking-[0.2em] text-sky-400 mb-2">S：共同化</h3>
+          <p class="mb-2">
+            経験や勘などの
+            <strong>暗黙知</strong>
+            を共有する段階。
+          </p>
+          <p class="mt-auto text-slate-300">
+            例：議論・ペア作業・レビュー
+          </p>
+        </div>
+        <div class="border border-slate-700 rounded-2xl p-4 bg-slate-900/70 flex flex-col">
+          <h3 class="text-[0.65rem] uppercase tracking-[0.2em] text-sky-400 mb-2">E：表出化</h3>
+          <p class="mb-2">
+            暗黙知を
+            <strong>言語・図・ルール</strong>
+            として明示化。
+          </p>
+          <p class="mt-auto text-slate-300">
+            例：IF–THEN ルール、チェックリスト
+          </p>
+        </div>
+        <div class="border border-slate-700 rounded-2xl p-4 bg-slate-900/70 flex flex-col">
+          <h3 class="text-[0.65rem] uppercase tracking-[0.2em] text-sky-400 mb-2">C：連結化</h3>
+          <p class="mb-2">
+            複数の形式知を
+            <strong>体系化・統合</strong>
+            する段階。
+          </p>
+          <p class="mt-auto text-slate-300">
+            例：RDFグラフ、知識ベース
+          </p>
+        </div>
+        <div class="border border-slate-700 rounded-2xl p-4 bg-slate-900/70 flex flex-col">
+          <h3 class="text-[0.65rem] uppercase tracking-[0.2em] text-sky-400 mb-2">I：内面化</h3>
+          <p class="mb-2">
+            形式知を再び
+            <strong>実践知・暗黙知</strong>
+            として体得。
+          </p>
+          <p class="mt-auto text-slate-300">
+            例：AIがルールを用いて推論し、人が結果を再解釈
+          </p>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 text-sm md:text-base">
+        <div class="border border-slate-700 rounded-2xl p-5 bg-slate-900/70">
+          <h3 class="text-xs uppercase tracking-[0.2em] text-emerald-400 mb-2">Personal RAG との対応</h3>
+          <ul class="list-disc list-inside space-y-2">
+            <li>
+              S〜E：
+              <strong>研究者の思考パターン・判断基準を観察し、言語化するプロセス</strong>
+            </li>
+            <li>
+              E〜C：
+              それを
+              <strong>思考アルゴリズム（Instruction Rules）</strong>
+              として整理し、
+              <strong>知識ルール（RDF的構造）</strong>
+              と接続する。
+            </li>
+            <li>
+              C〜I：
+              AIがルールに基づいて推論し、その結果を人間が評価・更新する循環。
+            </li>
+          </ul>
+        </div>
+        <div class="border border-slate-700 rounded-2xl p-5 bg-slate-900/70">
+          <h3 class="text-xs uppercase tracking-[0.2em] text-sky-400 mb-2">Object と Relation の観点</h3>
+          <p class="mb-2">
+            SECI の E（表出化）は、
+            <strong>「Object 間の Relation をどう扱うか」という暗黙知を、推論ルールとして外部化するフェーズ</strong>
+            として捉えられます。
+          </p>
+          <p>
+            つまり、
+            <strong>「どのオブジェクトを、どの関係で結び、どう解釈するか」</strong>
+            を明示的に書き下すことが、
+            生成AI時代の知識設計の核心になります。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 6: 説明3 - RDF × Object/Relation × Personal RAG -->
+  <section class="slide min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-32 bg-slate-950">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-6">
+        RDF × Object / Relation：知識を三項関係として記述する
+      </h2>
+
+      <div class="grid gap-6 md:grid-cols-[1.1fr,1fr] mb-8">
+        <div class="border border-slate-700 rounded-2xl p-5 bg-slate-900/70 text-sm md:text-base">
+          <h3 class="text-xs uppercase tracking-[0.2em] text-sky-400 mb-2">RDF の基本構造</h3>
+          <p class="mb-3">
+            RDF は、知識を
+            <strong>「主語（Subject）」「述語（Predicate）」「目的語（Object）」</strong>
+            の三項関係として表現します。
+          </p>
+          <ul class="list-disc list-inside space-y-2 mb-3">
+            <li>主語：あるオブジェクト（例：API、論文、ユーザー）</li>
+            <li>述語：関係や属性（例：hasRateLimit, authoredBy）</li>
+            <li>目的語：別のオブジェクト、または値（例：100 requests/min, 研究者A）</li>
+          </ul>
+          <p>
+            これはまさに、
+            <strong>「Object と Relation」</strong>
+            を明示的に記述するためのフォーマットです。
+          </p>
+        </div>
+        <div class="border border-slate-700 rounded-2xl p-5 bg-slate-900/70 text-sm md:text-base">
+          <h3 class="text-xs uppercase tracking-[0.2em] text-emerald-400 mb-2">例：API仕様の知識ルール化</h3>
+          <div class="space-y-2">
+            <p class="font-medium">自然言語での記述：</p>
+            <p class="bg-slate-900/80 rounded-lg px-3 py-2">
+              「このAPIには、1分あたり100リクエストのレート制限がある」
+            </p>
+            <p class="font-medium mt-3">RDF的な表現：</p>
+            <div class="bg-slate-900/80 rounded-lg px-3 py-2 text-xs md:text-sm font-mono">
+              &lt;API_X&gt; &lt;hasRateLimit&gt; "100 requests/min".
+            </div>
+            <p class="mt-3">
+              これが
+              <strong>知識ルール（Knowledge Base）</strong>
+              の最小単位となり、
+              思考アルゴリズムは
+              「レート制限が厳しいAPIは優先度を下げる」
+              といった
+              <strong>IF–THEN ルール</strong>
+              として別レイヤーに置かれます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-slate-700 rounded-2xl p-5 bg-slate-900/70 text-sm md:text-base">
+        <h3 class="text-xs uppercase tracking-[0.2em] text-sky-400 mb-2">Infographic：知識と推論のレイヤー分離</h3>
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="border border-slate-800 rounded-xl p-4 bg-slate-950/60">
+            <p class="text-xs text-slate-400 mb-1">Layer 1</p>
+            <p class="font-semibold mb-1">Object</p>
+            <p class="text-xs md:text-sm">
+              API、論文、ユーザー、概念など、
+              <strong>対象としてのノード</strong>
+            </p>
+          </div>
+          <div class="border border-slate-800 rounded-xl p-4 bg-slate-950/60">
+            <p class="text-xs text-slate-400 mb-1">Layer 2</p>
+            <p class="font-semibold mb-1">Relation</p>
+            <p class="text-xs md:text-sm">
+              hasRateLimit, authoredBy, cites など、
+              <strong>オブジェクト間のエッジ</strong>
+            </p>
+          </div>
+          <div class="border border-slate-800 rounded-xl p-4 bg-slate-950/60">
+            <p class="text-xs text-slate-400 mb-1">Layer 3</p>
+            <p class="font-semibold mb-1">Reasoning Rules</p>
+            <p class="text-xs md:text-sm">
+              「レート制限が厳しいAPIは避ける」などの
+              <strong>思考アルゴリズム</strong>
+              が、このグラフの上で動く。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 7: 結論の導出 -->
+  <section class="slide min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-32 bg-slate-950">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-6">
+        結論：知識を「構造」と「思考プロトコル」に分けて設計する
+      </h2>
+
+      <div class="grid gap-6 md:grid-cols-2 text-sm md:text-base mb-8">
+        <div class="border border-slate-700 rounded-2xl p-5 bg-slate-900/70">
+          <h3 class="text-xs uppercase tracking-[0.2em] text-sky-400 mb-2">導かれる結論</h3>
+          <ul class="list-disc list-inside space-y-2">
+            <li>
+              知識は、
+              <strong>Object（対象）と Relation（関係）のネットワーク</strong>
+              として表現するのが自然であり、RDF はそのための有効な形式である。
+            </li>
+            <li>
+              DIKW の「Wisdom」、SECI の「表出化」は、
+              <strong>思考アルゴリズム（推論ルール）の外部化</strong>
+              として再解釈できる。
+            </li>
+            <li>
+              Personal RAG の本質は、
+              <strong>知識ルール（構造化された事実）と、思考アルゴリズム（判断ルール）を分離して設計すること</strong>
+              にある。
+            </li>
+          </ul>
+        </div>
+        <div class="border border-slate-700 rounded-2xl p-5 bg-slate-900/70">
+          <h3 class="text-xs uppercase tracking-[0.2em] text-emerald-400 mb-2">研究者にとっての意味</h3>
+          <p class="mb-2">
+            研究者は、既に豊富な理論・モデルを持っています。それを
+            <strong>「Object と Relation」＋「思考アルゴリズム」</strong>
+            という形で生成AIに渡すことで、
+            <strong>「自分の思考プロトコルを外部化したパートナー」</strong>
+            を構築できます。
+          </p>
+          <p>
+            これは単なるツール利用ではなく、
+            <strong>「自分の知的生産プロセスそのものを設計する行為」</strong>
+            です。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 8: 補足 ＋ まとめ -->
+  <section class="slide min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-32 bg-slate-950">
+    <div class="max-w-5xl mx-auto space-y-8">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-semibold mb-4">
+          補足：実装に向けたヒント
+        </h2>
+        <div class="grid gap-4 md:grid-cols-3 text-xs md:text-sm">
+          <div class="border border-slate-700 rounded-2xl p-4 bg-slate-900/70">
+            <p class="text-xs uppercase tracking-[0.2em] text-sky-400 mb-1">Step 1</p>
+            <p class="font-semibold mb-1">対象領域の Object を洗い出す</p>
+            <p>
+              API、論文、概念、ユーザーなど、
+              <strong>ノード候補</strong>
+              を列挙する。
+            </p>
+          </div>
+          <div class="border border-slate-700 rounded-2xl p-4 bg-slate-900/70">
+            <p class="text-xs uppercase tracking-[0.2em] text-sky-400 mb-1">Step 2</p>
+            <p class="font-semibold mb-1">Relation を定義する</p>
+            <p>
+              authoredBy, cites, dependsOn など、
+              <strong>よく使う関係</strong>
+              を決める。
+            </p>
+          </div>
+          <div class="border border-slate-700 rounded-2xl p-4 bg-slate-900/70">
+            <p class="text-xs uppercase tracking-[0.2em] text-sky-400 mb-1">Step 3</p>
+            <p class="font-semibold mb-1">思考アルゴリズムを言語化する</p>
+            <p>
+              「どのように優先順位をつけるか」「何を重視するか」を
+              <strong>IF–THEN で書き出す</strong>。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl md:text-3xl font-semibold mb-4">
+          まとめ：生成AI時代の「知識設計」の新しい基準
+        </h2>
+        <div class="border border-slate-700 rounded-2xl p-5 bg-slate-900/70 text-sm md:text-base">
+          <ul class="list-disc list-inside space-y-2">
+            <li>
+              知識は、
+              <strong>Object と Relation のネットワーク</strong>
+              として表現することで、生成AIと自然に接続できる。
+            </li>
+            <li>
+              DIKW・SECI・RDF は、
+              <strong>Personal RAG の「知識ルール」と「思考アルゴリズム」</strong>
+              という二層構造に統合して理解できる。
+            </li>
+            <li>
+              研究者が自らの
+              <strong>思考プロトコルを外部化し、AIに実装する</strong>
+              ことで、「自分の分身としてのRAG」を設計できる。
+            </li>
+          </ul>
+          <p class="mt-4 text-slate-200">
+            次のステップとして、
+            <strong>あなた自身の研究領域を題材に、「Object と Relation のリスト」と「思考アルゴリズムの草案」</strong>
+            を書き出してみてください。それが、Personal RAG の設計図になります。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
