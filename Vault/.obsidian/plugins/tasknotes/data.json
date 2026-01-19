@@ -447,17 +447,16 @@
   },
   "pomodoroState": {
     "isRunning": true,
-    "timeRemaining": 1500,
+    "timeRemaining": 900,
     "currentSession": {
-      "id": "1768805970811",
-      "taskPath": "TaskNotes/Tasks/how I can use task notes effectively.md",
-      "startTime": "2026-01-19T15:59:30.811+09:00",
-      "plannedDuration": 25,
-      "type": "work",
+      "id": "1768807870021",
+      "startTime": "2026-01-19T16:31:10.021+09:00",
+      "plannedDuration": 15,
+      "type": "long-break",
       "completed": false,
       "activePeriods": [
         {
-          "startTime": "2026-01-19T15:59:30.811+09:00"
+          "startTime": "2026-01-19T16:31:10.021+09:00"
         }
       ]
     }
@@ -663,6 +662,21 @@
         {
           "startTime": "2026-01-19T15:22:54.120+09:00",
           "endTime": "2026-01-19T15:27:58.172+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768805970811",
+      "startTime": "2026-01-19T15:59:30.811+09:00",
+      "endTime": "2026-01-19T16:31:08.698+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/how I can use task notes effectively.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-19T15:59:30.811+09:00",
+          "endTime": "2026-01-19T16:31:08.698+09:00"
         }
       ]
     }
