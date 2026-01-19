@@ -13,8 +13,8 @@
             "state": {
               "type": "tasknotes-pomodoro-view",
               "state": {},
-              "icon": "lucide-ghost",
-              "title": "tasknotes-pomodoro-view"
+              "icon": "clock",
+              "title": "Pomodoro"
             }
           },
           {
@@ -29,6 +29,16 @@
               },
               "icon": "lucide-file",
               "title": "2026-01-19"
+            }
+          },
+          {
+            "id": "82ce6b7442d10cfd",
+            "type": "leaf",
+            "state": {
+              "type": "tasknotes-pomodoro-stats-view",
+              "state": {},
+              "icon": "bar-chart",
+              "title": "Pomodoro stats"
             }
           }
         ],

@@ -3,7 +3,7 @@ status: open
 priority: normal
 scheduled: 2026-01-19
 dateCreated: 2026-01-19T13:05:03.301+09:00
-dateModified: 2026-01-19T16:31:08.699+09:00
+dateModified: 2026-01-19T16:39:42.660+09:00
 tags:
   - task
 timeEntries:
@@ -22,6 +22,8 @@ timeEntries:
   - startTime: 2026-01-19T15:59:30.833+09:00
     description: Work session
     endTime: 2026-01-19T16:31:08.709+09:00
+  - startTime: 2026-01-19T16:39:42.661+09:00
+    description: Work session
 ---
 
 - To Use a daily note for today's tasks as a hub note
