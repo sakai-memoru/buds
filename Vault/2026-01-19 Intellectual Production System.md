@@ -1,0 +1,70 @@
+Intellectual Production
+	- ![[Pasted image 20260119105334.png]]
+	- View my environment and concerns
+		- Facts and Data, Digital
+		- Truly valuable facts
+			- Event, Incident, Happening, Affair, Function, Case, Trouble, holding, Festivities, Social gathering
+		- Artifacts
+			- Code and Frameworks
+			- Drawing, Painting
+			- Music
+		- Pattern cognition
+			- Variables
+			- Key Indicators
+	- Journal
+		- Domain space
+		- Problem space
+		- Solution space
+	- Trigger
+		- Query
+		- Answer - 400-1200 Chars
+	- Artifacts
+		- JOURNAL
+		- BUD
+			- KEEP
+		- LEAF: RAG
+			- ROOT
+			- STEM
+				- IF-THEN
+		- GRAIN: SCRIPT
+			- NOTE
+	- Keep
+	- Triggered cognitive dissonance
+		- Question
+		- Critical Question
+	- Issues
+		- Risk and Fear
+	- Meaning
+		- Definition
+		- Reference
+	- Environment
+	- Tool: Tool-Set
+		- Framework
+		- Scheme
+		- Method
+		- Feature
+	- Skill: Skill set
+		- Value: Value set
+		- Question
+		- Rule set
+	- Mind: Mindset
+		- Belief set
+		- Behavior, Attitude
+	- Data: Dataset
+		- Resultset
+	- Note
+	- VVM: Crucial Matters
+		- Value
+			- Key Variable
+			- Driver
+				- Assessment
+		- Mission: Principle
+			- A way
+				- Procedure
+			- A flow (STEREAM)
+			- Key Actions
+		- Vision: Goal
+			- Outcomes
+	- Concrete issues - Project notes
+		- Gap
+		- Tradeoff

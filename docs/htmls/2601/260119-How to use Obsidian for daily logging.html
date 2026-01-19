@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Obsidian × Generative AIでObservationをAssetsにする</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Noto Sans JP', 'Inter', sans-serif; }
+    section { min-height: 100vh; padding: 4rem 1rem; }
+    @media print {
+      section { page-break-after: always; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Slide 1: Title -->
+  <section class="flex flex-col justify-center items-center text-center bg-blue-100">
+    <h1 class="text-4xl font-bold mb-4">Obsidian × GenerativeAIで<br>ObservationsをAssetsにする</h1>
+    <p class="text-lg">Daily Notesが、将来のInsightを生む。</p>
+  </section>
+
+  <!-- Slide 2: 導入 -->
+  <section>
+    <h2 class="text-2xl font-semibold mb-4">[Why] なぜ、Daily NotesにLogを蓄積するのか？</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-4 shadow rounded">
+        <h3 class="font-bold text-lg mb-2">Question</h3>
+        <p>どうやって、<strong>Obsidian</strong>の<strong>Daily Notes</strong>で、logを蓄積すればよいですか？</p>
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <h3 class="font-bold text-lg mb-2">Answer</h3>
+        <p>Daily NotesにTasks・Notesを<strong>logging</strong>する。Obsidianの#tagや[[link]]で、データ（<strong>Observations</strong>)をRelativeな関係づけし、再利用可能なデータ資産とする。</p>
+        <p>Taskを起こして、Tasknotesを作成する。<strong>Tasknotes</strong>を、使って、AIでNoteから、ROOT/STEMに構造化する。</p>
+      </div>
+    </div>
+    
+  </section>
+
+  <!-- Slide 3: 現状認識 -->
+  <section>
+    <h2 class="text-2xl font-semibold mb-6">Observation, ROOT, STEMの断片化とその課題</h2>
+    <table class="table-auto w-full bg-white shadow rounded">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="px-4 py-2">課題</th>
+          <th class="px-4 py-2">影響</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border px-4 py-2">毎日の<strong>Logging</strong>が継続しない</td>
+          <td class="border px-4 py-2">Loggingが中途半端になる</td>
+        </tr>
+        <tr>
+          <td class="border px-4 py-2">得た<strong>Observations</strong>や調べた<strong>Researches</strong>が散在している</td>
+          <td class="border px-4 py-2">蓄積の仕組み(<strong>flow and stock</strong>)がなく、再利用ができていない</td>
+        </tr>
+        <tr>
+          <td class="border px-4 py-2">Explorationで得た<strong>Deep Knowledge</strong>が消えていく</td>
+          <td class="border px-4 py-2">どうやって、Argumentsに反映するかが課題</td>
+        </tr>
+        <tr>
+          <td class="border px-4 py-2">集めているObservationsに<strong>Relative</strong>な構造がない</td>
+          <td class="border px-4 py-2">Observationsを如何にRelativeし、Structuredして、InsightをGainするかが課題</td>
+        </tr>
+        <tr>
+          <td class="border px-4 py-2">日々の作業に、<strong>ROOT/STEM</strong>のAccumulateを意識した<strong>Routine</strong>を持つべき</td>
+          <td class="border px-4 py-2">継続的に、ROOT/STEMが蓄積する仕組み化が重要。<br />（Question＆Answerを日々蓄積する）</td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <p>蓄積の対象は以下、「情報」としての<strong>ROOT & STEM</strong></p>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>F:</li>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Fact</li>
+        </ul>
+        <li>D:</li>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Digital, Data</li>
+          <li>Definition</li>
+          <li>reference</li>
+          <li>rule, pattern</li>
+        </ul>
+        <li>E:</li>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Experience, Experiments</li>
+          <li>Embodiment</li>
+          <li>Examples</li>
+          <li>Exceptions</li>
+        </ul>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Slide 4: 解決策の全体像 -->
+  <section>
+    <h2 class="text-2xl font-semibold mb-6">Daily Note × Generative AIの利用Flow</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+      <div class="bg-white p-4 shadow rounded">
+        <strong>Logging</strong>(Record)<br>日々のTasks・Processingをnote
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <strong>Structures</strong><br>tags・links・templates
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <strong>Queries</strong><br>DataviewやKey searchで再利用
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <strong>Script</strong>(Insight)<br>Generative AIでSummarize・Analyse      
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+      <div class="bg-blue-100 p-4 shadow rounded">
+        <strong>ROOT/STEM</strong><br>Generative AIでSlids生成      
+      </div>
+      <div class="bg-blue-100 p-4 shadow rounded">
+        <strong>Q&A</strong><br>Set some of Questions and Answers
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 5: 実践例 -->
+  <section>
+    <h2 class="text-2xl font-semibold mb-6">Logging standard form using templates</h2>
+    <pre class="bg-gray-800 text-white p-4 rounded overflow-x-auto text-sm">
+## Log:{{date:YYYY-MM-DD}} 
+
+<strong>📌 Today's Goal</strong>
+- 
+<strong>🕒 Time log - Using Pomodoro timer</strong>
+- 09:00 ObsidianでDaily Note作成
+- 10:30 論文レビュー
+
+<strong>💡 Awareness</strong>
+- 
+<strong>🔗 Tasknotes</strong>
+- [[How I can use task notes effectively]]
+    </pre>
+  </section>
+
+  <!-- Slide 6: 生成AIとの連携 -->
+  <section>
+    <h2 class="text-2xl font-semibold mb-6">Discourse Analysis: Re-finding an insight using Generative AI</h2>
+    <ul class="list-disc pl-6 space-y-2">
+      <li><strong>Make a ROOT</strong>: 過去の記録から重要ポイントを抽出</li>
+      <li><strong>CLASSIFYING</strong>: タグやテーマごとに整理</li>
+      <li><strong>Get and Rethink RELATIVEs</strong>: 類似ノートを自動で提案</li>
+      <li><strong>MAKE A DEEP QUERY</strong>: 思考を深める質問を提示</li>
+    </ul>
+  </section>
+  
+  <!-- Slide 7: 補足 -->
+  <section>
+    <h2 class="text-2xl font-semibold mb-6">おすすめプラグイン</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-white p-4 shadow rounded">
+        <strong>Templater</strong><br>テンプレートの自動展開
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <strong>Dataview</strong><br>ノートのクエリと可視化
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <strong>Periodic Notes</strong><br>日・週・月単位の記録管理
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <strong>Canvas</strong><br>視覚的な思考整理
+      </div>
+    </div>
+  </section>
+  
+  <!-- Slide 7.5: TaskNotes連携 -->
+  <section>
+    <h2 class="text-2xl font-semibold mb-6">TaskNotesでタスクをDaily Noteに集約</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-4 shadow rounded">
+        <h3 class="text-lg font-bold mb-2">TaskNotesとは？</h3>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><strong>タスク専用ノート</strong>を自動生成</li>
+          <li>各タスクに<strong>関連ノートへのリンク</strong>を付与</li>
+          <li><strong>Daily Noteと連携</strong>して進捗を可視化</li>
+        </ul>
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <h3 class="text-lg font-bold mb-2">活用フロー</h3>
+        <ol class="list-decimal pl-5 space-y-1">
+          <li>プロジェクトノートで <code>- [ ] タスク</code> を記述</li>
+          <li>TaskNotesが自動でタスクノートを生成</li>
+          <li>Daily Noteにタスクのリンクが表示される</li>
+          <li>進捗をDaily Noteから直接更新可能</li>
+        </ol>
+      </div>
+    </div>
+    <div class="mt-6 bg-gray-100 p-4 rounded">
+      <h4 class="font-semibold mb-2">📌 例：Daily Noteでの表示</h4>
+      <pre class="bg-gray-800 text-white p-3 rounded text-sm overflow-x-auto">
+## 🔧 今日のタスク
+
+- [ ] [[プロジェクトA#タスク1]] データ収集スクリプトの修正
+- [x] [[プロジェクトB#タスク2]] 会議資料の提出
+      </pre>
+    </div>
+  </section>
+
+  <!-- Slide 8: まとめ -->
+  <section class="bg-blue-50">
+    <h2 class="text-2xl font-semibold mb-4">まとめ：知識を「流れ」から「資産」へ</h2>
+    <p class="mb-2">Daily Noteは、単なる日記ではなく、知識のネットワークを育てる土壌。</p>
+    <p class="mb-2">生成AIと組み合わせることで、記録は洞察へと昇華する。</p>
+    <p><strong>今日の記録が、未来のあなたを助ける。</strong></p>
+  </section>
+
+</body>
+</html>

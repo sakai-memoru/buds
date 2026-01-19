@@ -1,0 +1,10 @@
+- How to use Generative AI
+	- ![[Pasted image 20260119112836.png]]
+	- STREAM
+		- Edit
+		- Structure
+		- Translate
+		- Review
+		- Align
+		- Merge
+-  
