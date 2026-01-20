@@ -18,31 +18,40 @@
             }
           },
           {
-            "id": "6a5d3f4f43e55749",
+            "id": "ee10ea13857199b2",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2026-01-19.md",
+                "file": "2026-01-19 Intellectual Production Flow.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-01-19"
-            }
-          },
-          {
-            "id": "82ce6b7442d10cfd",
-            "type": "leaf",
-            "state": {
-              "type": "tasknotes-pomodoro-stats-view",
-              "state": {},
-              "icon": "bar-chart",
-              "title": "Pomodoro stats"
+              "title": "2026-01-19 Intellectual Production Flow"
             }
           }
-        ],
-        "currentTab": 1
+        ]
+      },
+      {
+        "id": "17c48383b72c5bdd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3aa191665a153c79",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024"
+            }
+          }
+        ]
       }
     ],
     "direction": "vertical"
@@ -199,15 +208,22 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "6a5d3f4f43e55749",
+  "active": "3aa191665a153c79",
   "lastOpenFiles": [
-    "2511C-English new grammer.md",
-    "TaskNotes/Views/tasks-default.base",
-    "2026-01-19 Intellectual Production System.md",
     "2026-01-19.md",
-    "Untitled.md",
     "2026-01-19 Intellectual Production Flow.md",
+    "TaskNotes/Tasks/Make an intellectual production system.md",
+    "TaskNotes/Tasks/how I can use task notes effectively.md",
+    "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+    "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024.md",
+    "2026-01-19 Intellectual Production System.md",
     "2026-01-19_Roles of Generative AI.md",
+    "Assets/Pasted image 20260120205725.png",
+    "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024 - Note.md",
+    "2026-01-20.md",
+    "TaskNotes/Views/tasks-default.base",
+    "2511C-English new grammer.md",
+    "Untitled.md",
     "Assets/Pasted image 20260115170706.png",
     "Assets/Pasted image 20260115170732.png",
     "Assets/Pasted image 20260115170751.png",
@@ -218,15 +234,12 @@
     "images",
     "New folder",
     "templates",
-    "TaskNotes/Tasks/how I can use task notes effectively.md",
     "TaskNotes/Views/kanban-default.base",
     "Pasted image 20260119123550.png",
     "Pasted image 20260119123440.png",
-    "TaskNotes/Tasks/Make an intellectual production system.md",
     "TaskNotes/Tasks",
     "Pasted image 20260119112836.png",
     "202-01-19_Roles of Generative AI.md",
-    "Pasted image 20260119105334.png",
     "Untitled.base",
     "TaskNotes/Views/agenda-default.base",
     "TaskNotes/Views/calendar-default.base",

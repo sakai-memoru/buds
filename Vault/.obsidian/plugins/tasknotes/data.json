@@ -446,23 +446,10 @@
     ]
   },
   "pomodoroState": {
-    "isRunning": true,
-    "timeRemaining": 1500,
-    "currentSession": {
-      "id": "1768808382635",
-      "taskPath": "TaskNotes/Tasks/how I can use task notes effectively.md",
-      "startTime": "2026-01-19T16:39:42.635+09:00",
-      "plannedDuration": 25,
-      "type": "work",
-      "completed": false,
-      "activePeriods": [
-        {
-          "startTime": "2026-01-19T16:39:42.635+09:00"
-        }
-      ]
-    }
+    "isRunning": false,
+    "timeRemaining": 1500
   },
-  "lastPomodoroDate": "2026-01-18",
+  "lastPomodoroDate": "2026-01-19",
   "pomodoroHistory": [
     {
       "id": "1768788544949",
@@ -694,7 +681,152 @@
           "endTime": "2026-01-19T16:39:40.790+09:00"
         }
       ]
+    },
+    {
+      "id": "1768897732538",
+      "startTime": "2026-01-20T17:28:52.538+09:00",
+      "endTime": "2026-01-20T17:53:52.560+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T17:28:52.538+09:00",
+          "endTime": "2026-01-20T17:53:52.560+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768899233793",
+      "startTime": "2026-01-20T17:53:53.792+09:00",
+      "endTime": "2026-01-20T17:57:08.238+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": false,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T17:53:53.792+09:00",
+          "endTime": "2026-01-20T17:57:08.238+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768899429736",
+      "startTime": "2026-01-20T17:57:09.736+09:00",
+      "endTime": "2026-01-20T18:22:09.762+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T17:57:09.736+09:00",
+          "endTime": "2026-01-20T18:22:09.762+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768900930840",
+      "startTime": "2026-01-20T18:22:10.840+09:00",
+      "endTime": "2026-01-20T18:27:10.859+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T18:22:10.840+09:00",
+          "endTime": "2026-01-20T18:27:10.859+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768904217323",
+      "startTime": "2026-01-20T19:16:57.323+09:00",
+      "endTime": "2026-01-20T19:41:57.337+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T19:16:57.323+09:00",
+          "endTime": "2026-01-20T19:41:57.337+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768905718455",
+      "startTime": "2026-01-20T19:41:58.455+09:00",
+      "endTime": "2026-01-20T19:46:58.461+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T19:41:58.455+09:00",
+          "endTime": "2026-01-20T19:46:58.461+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768906020667",
+      "startTime": "2026-01-20T19:47:00.667+09:00",
+      "endTime": "2026-01-20T20:12:00.690+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T19:47:00.667+09:00",
+          "endTime": "2026-01-20T20:12:00.690+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768907521783",
+      "startTime": "2026-01-20T20:12:01.783+09:00",
+      "endTime": "2026-01-20T20:27:01.800+09:00",
+      "plannedDuration": 15,
+      "type": "long-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T20:12:01.783+09:00",
+          "endTime": "2026-01-20T20:27:01.801+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768909049875",
+      "startTime": "2026-01-20T20:37:29.875+09:00",
+      "endTime": "2026-01-20T21:02:29.890+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T20:37:29.875+09:00",
+          "endTime": "2026-01-20T21:02:29.890+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768910550961",
+      "startTime": "2026-01-20T21:02:30.961+09:00",
+      "endTime": "2026-01-20T21:06:45.209+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": false,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T21:02:30.961+09:00",
+          "endTime": "2026-01-20T21:06:45.209+09:00"
+        }
+      ]
     }
   ],
-  "lastSelectedTaskPath": "TaskNotes/Tasks/how I can use task notes effectively.md"
+  "lastSelectedTaskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md"
 }
