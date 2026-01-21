@@ -18,31 +18,41 @@
             }
           },
           {
-            "id": "6a5d3f4f43e55749",
+            "id": "0c74b1cd12af0f84",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2026-01-19.md",
+                "file": "2026-01-21-Turning Observations into Assets with Obsidian and Generative AI.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-01-19"
-            }
-          },
-          {
-            "id": "82ce6b7442d10cfd",
-            "type": "leaf",
-            "state": {
-              "type": "tasknotes-pomodoro-stats-view",
-              "state": {},
-              "icon": "bar-chart",
-              "title": "Pomodoro stats"
+              "title": "2026-01-21-Turning Observations into Assets with Obsidian and Generative AI"
             }
           }
         ],
         "currentTab": 1
+      },
+      {
+        "id": "aa1d0f44025badf3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6022ad10f2bfa564",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "2026-01-21-KPT.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-01-21-KPT"
+            }
+          }
+        ]
       }
     ],
     "direction": "vertical"
@@ -199,44 +209,53 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "6a5d3f4f43e55749",
+  "active": "0c74b1cd12af0f84",
   "lastOpenFiles": [
-    "2511C-English new grammer.md",
-    "TaskNotes/Views/tasks-default.base",
+    "2026-01-21-KPT.md",
+    "TaskNotes/Tasks/MBUILD - Make a slide of category on verbs.md",
+    "TaskNotes/Tasks/RESEARCH and Practice how to use Templater Plugin on Obsidian App.md",
+    "TaskNotes/Tasks/PRACTICE - how I can use task notes effectively.md",
+    "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
+    "TaskNotes/Tasks/MBUILD - Make an intellectual production system.md",
+    "TaskNotes/Tasks/Assets/Pasted image 20260121200737.png",
+    "TaskNotes/Tasks/Assets/Pasted image 20260121200136.png",
+    "TaskNotes/Tasks/Assets/Pasted image 20260121193341.png",
+    "TaskNotes/Tasks/Assets/Pasted image 20260121175414.png",
+    "Journals/2026-01-21.md",
+    "Journals/Assets/Pasted image 20260121172530.png",
+    "Journals/Assets/Pasted image 20260121172523.png",
+    "Journals/Assets/Pasted image 20260121172513.png",
+    "Journals/Assets",
+    "2026-01-21-Turning Observations into Assets with Obsidian and Generative AI.md",
+    "TaskNotes/Tasks/Assets/Pasted image 20260121164526.png",
+    "TaskNotes/Tasks/Assets",
+    "TaskNotes/Views/calendar-default.base",
+    "template/log.md",
+    "template/New Text Document.txt",
+    "template",
+    "New folder",
+    "Assets/Pasted image 20260121144744.png",
+    "Assets/260119-How to use Obsidian for daily logging.html",
+    "26-01-21-Turning Observations into Assets with Obsidian and Generative AI.md",
+    "Journals/2026-01-20.md",
+    "Journals/2026-01-22.md",
+    "templates/daily note.md",
+    "2026-01-20.md",
+    "Assets/Pasted image 20260119105334.png",
+    "Journals",
+    "journals",
     "2026-01-19 Intellectual Production System.md",
     "2026-01-19.md",
-    "Untitled.md",
+    "2511C-English new grammer.md",
+    "TaskNotes/Views/tasks-default.base",
     "2026-01-19 Intellectual Production Flow.md",
     "2026-01-19_Roles of Generative AI.md",
-    "Assets/Pasted image 20260115170706.png",
-    "Assets/Pasted image 20260115170732.png",
-    "Assets/Pasted image 20260115170751.png",
-    "Assets/Pasted image 20260119105334.png",
-    "Assets/Pasted image 20260119112836.png",
-    "Assets/Pasted image 20260119123550.png",
-    "Assets",
-    "images",
-    "New folder",
-    "templates",
-    "TaskNotes/Tasks/how I can use task notes effectively.md",
-    "TaskNotes/Views/kanban-default.base",
-    "Pasted image 20260119123550.png",
-    "Pasted image 20260119123440.png",
-    "TaskNotes/Tasks/Make an intellectual production system.md",
-    "TaskNotes/Tasks",
-    "Pasted image 20260119112836.png",
     "202-01-19_Roles of Generative AI.md",
-    "Pasted image 20260119105334.png",
-    "Untitled.base",
-    "TaskNotes/Views/agenda-default.base",
-    "TaskNotes/Views/calendar-default.base",
     "Untitled.canvas",
     "2026-01-15.md",
     "2025-11-21.md",
     "2025-11-20-Nodes.md",
     "2511C-Journey.md",
-    "Handwrittens.md",
-    "Index.md",
-    "2511B-How to use Obsidian Apps.md"
+    "Handwrittens.md"
   ]
 }

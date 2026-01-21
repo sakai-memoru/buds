@@ -14,4 +14,7 @@ timeEntries:
     description: Work session
     endTime: 2026-01-19T12:49:01.494+09:00
 ---
-
+![[Pasted image 20260119123550.png]]
+- ✓ 終わりないシステム改善が必要。
+	- コンセプトを持たないと、何が目的で、何が正しいのか、最終的なOutcomesにどうつながるのかが、見えなくなるのでは。
+![[Pasted image 20260121200737.png]]

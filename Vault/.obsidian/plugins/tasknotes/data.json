@@ -447,22 +447,21 @@
   },
   "pomodoroState": {
     "isRunning": true,
-    "timeRemaining": 1500,
+    "timeRemaining": 900,
     "currentSession": {
-      "id": "1768808382635",
-      "taskPath": "TaskNotes/Tasks/how I can use task notes effectively.md",
-      "startTime": "2026-01-19T16:39:42.635+09:00",
-      "plannedDuration": 25,
-      "type": "work",
+      "id": "1768994941277",
+      "startTime": "2026-01-21T20:29:01.277+09:00",
+      "plannedDuration": 15,
+      "type": "long-break",
       "completed": false,
       "activePeriods": [
         {
-          "startTime": "2026-01-19T16:39:42.635+09:00"
+          "startTime": "2026-01-21T20:29:01.277+09:00"
         }
       ]
     }
   },
-  "lastPomodoroDate": "2026-01-18",
+  "lastPomodoroDate": "2026-01-20",
   "pomodoroHistory": [
     {
       "id": "1768788544949",
@@ -694,7 +693,369 @@
           "endTime": "2026-01-19T16:39:40.790+09:00"
         }
       ]
+    },
+    {
+      "id": "1768957006403",
+      "startTime": "2026-01-21T09:56:46.403+09:00",
+      "endTime": "2026-01-21T10:01:50.766+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/how I can use task notes effectively.md",
+      "completed": false,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T09:56:46.403+09:00",
+          "endTime": "2026-01-21T10:01:50.766+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768957483255",
+      "startTime": "2026-01-21T10:04:43.255+09:00",
+      "endTime": "2026-01-21T10:29:58.307+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T10:04:43.255+09:00",
+          "endTime": "2026-01-21T10:29:58.307+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768958999529",
+      "startTime": "2026-01-21T10:29:59.529+09:00",
+      "endTime": "2026-01-21T10:31:06.727+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": false,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T10:29:59.529+09:00",
+          "endTime": "2026-01-21T10:31:06.727+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768959068385",
+      "startTime": "2026-01-21T10:31:08.385+09:00",
+      "endTime": "2026-01-21T10:56:14.433+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/how I can use task notes effectively.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T10:31:08.385+09:00",
+          "endTime": "2026-01-21T10:56:14.433+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768960575506",
+      "startTime": "2026-01-21T10:56:15.505+09:00",
+      "endTime": "2026-01-21T11:01:21.534+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T10:56:15.505+09:00",
+          "endTime": "2026-01-21T11:01:21.534+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768965708083",
+      "startTime": "2026-01-21T12:21:48.083+09:00",
+      "endTime": "2026-01-21T12:46:48.125+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/how I can use task notes effectively.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T12:21:48.083+09:00",
+          "endTime": "2026-01-21T12:46:48.125+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768967209284",
+      "startTime": "2026-01-21T12:46:49.284+09:00",
+      "endTime": "2026-01-21T12:51:49.312+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T12:46:49.284+09:00",
+          "endTime": "2026-01-21T12:51:49.312+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768969039235",
+      "startTime": "2026-01-21T13:17:19.235+09:00",
+      "endTime": "2026-01-21T13:22:49.507+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "completed": false,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T13:17:19.235+09:00",
+          "endTime": "2026-01-21T13:22:49.507+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768969377382",
+      "startTime": "2026-01-21T13:22:57.381+09:00",
+      "endTime": "2026-01-21T13:47:57.395+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/Research and Practice how to use Templater Plugin on Obsidian App.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T13:22:57.381+09:00",
+          "endTime": "2026-01-21T13:47:57.395+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768970878532",
+      "startTime": "2026-01-21T13:47:58.531+09:00",
+      "endTime": "2026-01-21T14:02:58.564+09:00",
+      "plannedDuration": 15,
+      "type": "long-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T13:47:58.531+09:00",
+          "endTime": "2026-01-21T14:02:58.564+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768972387224",
+      "startTime": "2026-01-21T14:13:07.224+09:00",
+      "endTime": "2026-01-21T14:38:07.246+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/Research and Practice how to use Templater Plugin on Obsidian App.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T14:13:07.224+09:00",
+          "endTime": "2026-01-21T14:38:07.246+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768973888443",
+      "startTime": "2026-01-21T14:38:08.443+09:00",
+      "endTime": "2026-01-21T14:40:27.416+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": false,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T14:38:08.443+09:00",
+          "endTime": "2026-01-21T14:40:27.416+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768974428256",
+      "startTime": "2026-01-21T14:47:08.256+09:00",
+      "endTime": "2026-01-21T15:12:08.291+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T14:47:08.256+09:00",
+          "endTime": "2026-01-21T15:12:08.291+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768975929424",
+      "startTime": "2026-01-21T15:12:09.424+09:00",
+      "endTime": "2026-01-21T15:15:58.103+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": false,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T15:12:09.424+09:00",
+          "endTime": "2026-01-21T15:15:58.103+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768976159622",
+      "startTime": "2026-01-21T15:15:59.622+09:00",
+      "endTime": "2026-01-21T15:40:59.639+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T15:15:59.622+09:00",
+          "endTime": "2026-01-21T15:40:59.639+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768977660789",
+      "startTime": "2026-01-21T15:41:00.789+09:00",
+      "endTime": "2026-01-21T15:46:00.810+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T15:41:00.789+09:00",
+          "endTime": "2026-01-21T15:46:00.810+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768979880443",
+      "startTime": "2026-01-21T16:18:00.443+09:00",
+      "endTime": "2026-01-21T16:43:09.470+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T16:18:00.443+09:00",
+          "endTime": "2026-01-21T16:43:09.470+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768981390643",
+      "startTime": "2026-01-21T16:43:10.643+09:00",
+      "endTime": "2026-01-21T16:58:10.668+09:00",
+      "plannedDuration": 15,
+      "type": "long-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T16:43:10.643+09:00",
+          "endTime": "2026-01-21T16:58:10.669+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768982477029",
+      "startTime": "2026-01-21T17:01:17.029+09:00",
+      "endTime": "2026-01-21T17:26:19.052+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T17:01:17.029+09:00",
+          "endTime": "2026-01-21T17:26:19.052+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768983980189",
+      "startTime": "2026-01-21T17:26:20.189+09:00",
+      "endTime": "2026-01-21T17:31:20.228+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T17:26:20.189+09:00",
+          "endTime": "2026-01-21T17:31:20.228+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768984454090",
+      "startTime": "2026-01-21T17:34:14.090+09:00",
+      "endTime": "2026-01-21T17:59:14.118+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T17:34:14.090+09:00",
+          "endTime": "2026-01-21T17:59:14.118+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768985955238",
+      "startTime": "2026-01-21T17:59:15.237+09:00",
+      "endTime": "2026-01-21T18:04:15.260+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T17:59:15.237+09:00",
+          "endTime": "2026-01-21T18:04:15.261+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768990388272",
+      "startTime": "2026-01-21T19:13:08.272+09:00",
+      "endTime": "2026-01-21T19:38:08.297+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T19:13:08.272+09:00",
+          "endTime": "2026-01-21T19:38:08.297+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768991889432",
+      "startTime": "2026-01-21T19:38:09.432+09:00",
+      "endTime": "2026-01-21T19:43:09.453+09:00",
+      "plannedDuration": 5,
+      "type": "short-break",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T19:38:09.432+09:00",
+          "endTime": "2026-01-21T19:43:09.453+09:00"
+        }
+      ]
+    },
+    {
+      "id": "1768993440095",
+      "startTime": "2026-01-21T20:04:00.094+09:00",
+      "endTime": "2026-01-21T20:29:00.112+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-21T20:04:00.094+09:00",
+          "endTime": "2026-01-21T20:29:00.112+09:00"
+        }
+      ]
     }
   ],
-  "lastSelectedTaskPath": "TaskNotes/Tasks/how I can use task notes effectively.md"
+  "lastSelectedTaskPath": "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md"
 }
