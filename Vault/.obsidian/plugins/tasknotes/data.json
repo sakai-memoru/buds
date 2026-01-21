@@ -446,6 +446,7 @@
     ]
   },
   "pomodoroState": {
+<<<<<<< HEAD
     "isRunning": true,
     "timeRemaining": 900,
     "currentSession": {
@@ -462,6 +463,12 @@
     }
   },
   "lastPomodoroDate": "2026-01-20",
+=======
+    "isRunning": false,
+    "timeRemaining": 1500
+  },
+  "lastPomodoroDate": "2026-01-19",
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
   "pomodoroHistory": [
     {
       "id": "1768788544949",
@@ -695,6 +702,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768957006403",
       "startTime": "2026-01-21T09:56:46.403+09:00",
       "endTime": "2026-01-21T10:01:50.766+09:00",
@@ -720,24 +728,49 @@
         {
           "startTime": "2026-01-21T10:04:43.255+09:00",
           "endTime": "2026-01-21T10:29:58.307+09:00"
+=======
+      "id": "1768897732538",
+      "startTime": "2026-01-20T17:28:52.538+09:00",
+      "endTime": "2026-01-20T17:53:52.560+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T17:28:52.538+09:00",
+          "endTime": "2026-01-20T17:53:52.560+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768958999529",
       "startTime": "2026-01-21T10:29:59.529+09:00",
       "endTime": "2026-01-21T10:31:06.727+09:00",
+=======
+      "id": "1768899233793",
+      "startTime": "2026-01-20T17:53:53.792+09:00",
+      "endTime": "2026-01-20T17:57:08.238+09:00",
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
       "plannedDuration": 5,
       "type": "short-break",
       "completed": false,
       "activePeriods": [
         {
+<<<<<<< HEAD
           "startTime": "2026-01-21T10:29:59.529+09:00",
           "endTime": "2026-01-21T10:31:06.727+09:00"
+=======
+          "startTime": "2026-01-20T17:53:53.792+09:00",
+          "endTime": "2026-01-20T17:57:08.238+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768959068385",
       "startTime": "2026-01-21T10:31:08.385+09:00",
       "endTime": "2026-01-21T10:56:14.433+09:00",
@@ -749,24 +782,49 @@
         {
           "startTime": "2026-01-21T10:31:08.385+09:00",
           "endTime": "2026-01-21T10:56:14.433+09:00"
+=======
+      "id": "1768899429736",
+      "startTime": "2026-01-20T17:57:09.736+09:00",
+      "endTime": "2026-01-20T18:22:09.762+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T17:57:09.736+09:00",
+          "endTime": "2026-01-20T18:22:09.762+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768960575506",
       "startTime": "2026-01-21T10:56:15.505+09:00",
       "endTime": "2026-01-21T11:01:21.534+09:00",
+=======
+      "id": "1768900930840",
+      "startTime": "2026-01-20T18:22:10.840+09:00",
+      "endTime": "2026-01-20T18:27:10.859+09:00",
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
       "plannedDuration": 5,
       "type": "short-break",
       "completed": true,
       "activePeriods": [
         {
+<<<<<<< HEAD
           "startTime": "2026-01-21T10:56:15.505+09:00",
           "endTime": "2026-01-21T11:01:21.534+09:00"
+=======
+          "startTime": "2026-01-20T18:22:10.840+09:00",
+          "endTime": "2026-01-20T18:27:10.859+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768965708083",
       "startTime": "2026-01-21T12:21:48.083+09:00",
       "endTime": "2026-01-21T12:46:48.125+09:00",
@@ -778,24 +836,49 @@
         {
           "startTime": "2026-01-21T12:21:48.083+09:00",
           "endTime": "2026-01-21T12:46:48.125+09:00"
+=======
+      "id": "1768904217323",
+      "startTime": "2026-01-20T19:16:57.323+09:00",
+      "endTime": "2026-01-20T19:41:57.337+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T19:16:57.323+09:00",
+          "endTime": "2026-01-20T19:41:57.337+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768967209284",
       "startTime": "2026-01-21T12:46:49.284+09:00",
       "endTime": "2026-01-21T12:51:49.312+09:00",
+=======
+      "id": "1768905718455",
+      "startTime": "2026-01-20T19:41:58.455+09:00",
+      "endTime": "2026-01-20T19:46:58.461+09:00",
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
       "plannedDuration": 5,
       "type": "short-break",
       "completed": true,
       "activePeriods": [
         {
+<<<<<<< HEAD
           "startTime": "2026-01-21T12:46:49.284+09:00",
           "endTime": "2026-01-21T12:51:49.312+09:00"
+=======
+          "startTime": "2026-01-20T19:41:58.455+09:00",
+          "endTime": "2026-01-20T19:46:58.461+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768969039235",
       "startTime": "2026-01-21T13:17:19.235+09:00",
       "endTime": "2026-01-21T13:22:49.507+09:00",
@@ -821,24 +904,49 @@
         {
           "startTime": "2026-01-21T13:22:57.381+09:00",
           "endTime": "2026-01-21T13:47:57.395+09:00"
+=======
+      "id": "1768906020667",
+      "startTime": "2026-01-20T19:47:00.667+09:00",
+      "endTime": "2026-01-20T20:12:00.690+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T19:47:00.667+09:00",
+          "endTime": "2026-01-20T20:12:00.690+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768970878532",
       "startTime": "2026-01-21T13:47:58.531+09:00",
       "endTime": "2026-01-21T14:02:58.564+09:00",
+=======
+      "id": "1768907521783",
+      "startTime": "2026-01-20T20:12:01.783+09:00",
+      "endTime": "2026-01-20T20:27:01.800+09:00",
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
       "plannedDuration": 15,
       "type": "long-break",
       "completed": true,
       "activePeriods": [
         {
+<<<<<<< HEAD
           "startTime": "2026-01-21T13:47:58.531+09:00",
           "endTime": "2026-01-21T14:02:58.564+09:00"
+=======
+          "startTime": "2026-01-20T20:12:01.783+09:00",
+          "endTime": "2026-01-20T20:27:01.801+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768972387224",
       "startTime": "2026-01-21T14:13:07.224+09:00",
       "endTime": "2026-01-21T14:38:07.246+09:00",
@@ -850,18 +958,38 @@
         {
           "startTime": "2026-01-21T14:13:07.224+09:00",
           "endTime": "2026-01-21T14:38:07.246+09:00"
+=======
+      "id": "1768909049875",
+      "startTime": "2026-01-20T20:37:29.875+09:00",
+      "endTime": "2026-01-20T21:02:29.890+09:00",
+      "plannedDuration": 25,
+      "type": "work",
+      "taskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+      "completed": true,
+      "activePeriods": [
+        {
+          "startTime": "2026-01-20T20:37:29.875+09:00",
+          "endTime": "2026-01-20T21:02:29.890+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     },
     {
+<<<<<<< HEAD
       "id": "1768973888443",
       "startTime": "2026-01-21T14:38:08.443+09:00",
       "endTime": "2026-01-21T14:40:27.416+09:00",
+=======
+      "id": "1768910550961",
+      "startTime": "2026-01-20T21:02:30.961+09:00",
+      "endTime": "2026-01-20T21:06:45.209+09:00",
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
       "plannedDuration": 5,
       "type": "short-break",
       "completed": false,
       "activePeriods": [
         {
+<<<<<<< HEAD
           "startTime": "2026-01-21T14:38:08.443+09:00",
           "endTime": "2026-01-21T14:40:27.416+09:00"
         }
@@ -1053,9 +1181,17 @@
         {
           "startTime": "2026-01-21T20:04:00.094+09:00",
           "endTime": "2026-01-21T20:29:00.112+09:00"
+=======
+          "startTime": "2026-01-20T21:02:30.961+09:00",
+          "endTime": "2026-01-20T21:06:45.209+09:00"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
         }
       ]
     }
   ],
+<<<<<<< HEAD
   "lastSelectedTaskPath": "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md"
+=======
+  "lastSelectedTaskPath": "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md"
+>>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
 }
