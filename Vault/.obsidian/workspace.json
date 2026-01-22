@@ -1,85 +1,20 @@
 {
   "main": {
-    "id": "e2fc7ebe8eac9fbf",
+    "id": "398e73ff705a7e12",
     "type": "split",
     "children": [
       {
-        "id": "d353db69213b345f",
+        "id": "6eae545bfbc9ea6d",
         "type": "tabs",
         "children": [
           {
-            "id": "7b6265c07aa480f2",
+            "id": "6a828efbbae698f8",
             "type": "leaf",
             "state": {
-              "type": "tasknotes-pomodoro-view",
+              "type": "empty",
               "state": {},
-              "icon": "clock",
-              "title": "Pomodoro"
-            }
-          },
-          {
-<<<<<<< HEAD
-            "id": "0c74b1cd12af0f84",
-=======
-            "id": "ee10ea13857199b2",
->>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-<<<<<<< HEAD
-                "file": "2026-01-21-Turning Observations into Assets with Obsidian and Generative AI.md",
-=======
-                "file": "2026-01-19 Intellectual Production Flow.md",
->>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
-                "mode": "source",
-                "source": false
-              },
               "icon": "lucide-file",
-<<<<<<< HEAD
-              "title": "2026-01-21-Turning Observations into Assets with Obsidian and Generative AI"
-            }
-          }
-        ],
-        "currentTab": 1
-      },
-      {
-        "id": "aa1d0f44025badf3",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "6022ad10f2bfa564",
-=======
-              "title": "2026-01-19 Intellectual Production Flow"
-            }
-          }
-        ]
-      },
-      {
-        "id": "17c48383b72c5bdd",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "3aa191665a153c79",
->>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-<<<<<<< HEAD
-                "file": "2026-01-21-KPT.md",
-=======
-                "file": "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024.md",
->>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-<<<<<<< HEAD
-              "title": "2026-01-21-KPT"
-=======
-              "title": "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024"
->>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
+              "title": "New tab"
             }
           }
         ]
@@ -88,20 +23,20 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "6a461ca89f20c37d",
+    "id": "f5c683510554f574",
     "type": "split",
     "children": [
       {
-        "id": "9f253eaea30a60c9",
+        "id": "556e4291f66e53f5",
         "type": "tabs",
         "children": [
           {
-            "id": "6b1ea62e5b40e6ea",
+            "id": "07349f8190e1ec28",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "byModifiedTime",
+                "sortOrder": "alphabetical",
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
@@ -109,7 +44,7 @@
             }
           },
           {
-            "id": "ffa301c0b4663d82",
+            "id": "d95102a814e36d01",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -126,7 +61,7 @@
             }
           },
           {
-            "id": "d026d0ebff73a122",
+            "id": "f586f942f0d81a9e",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -142,20 +77,19 @@
     "width": 300
   },
   "right": {
-    "id": "a9d267690e85b5f7",
+    "id": "d708fc2b46d2f226",
     "type": "split",
     "children": [
       {
-        "id": "2acc0fbbdd056f2f",
+        "id": "c0fc25158f6e5133",
         "type": "tabs",
         "children": [
           {
-            "id": "1516c4aea56090a5",
+            "id": "7db96bc5f9de398d",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Welcome.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -165,25 +99,24 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Welcome"
+              "title": "Backlinks"
             }
           },
           {
-            "id": "d5c68d412cbcca50",
+            "id": "d19ce9428c78227f",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Welcome.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Welcome"
+              "title": "Outgoing links"
             }
           },
           {
-            "id": "f45e7e5d5f3179fa",
+            "id": "648d97ab7223460e",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -198,18 +131,17 @@
             }
           },
           {
-            "id": "7055bd9c044c92a2",
+            "id": "6b45bb9f6fac11a4",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "Welcome.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Welcome"
+              "title": "Outline"
             }
           }
         ]
@@ -239,92 +171,6 @@
       "templater-obsidian:Templater": false
     }
   },
-<<<<<<< HEAD
-  "active": "0c74b1cd12af0f84",
-  "lastOpenFiles": [
-    "2026-01-21-KPT.md",
-    "TaskNotes/Tasks/MBUILD - Make a slide of category on verbs.md",
-    "TaskNotes/Tasks/RESEARCH and Practice how to use Templater Plugin on Obsidian App.md",
-    "TaskNotes/Tasks/PRACTICE - how I can use task notes effectively.md",
-    "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
-    "TaskNotes/Tasks/MBUILD - Make an intellectual production system.md",
-    "TaskNotes/Tasks/Assets/Pasted image 20260121200737.png",
-    "TaskNotes/Tasks/Assets/Pasted image 20260121200136.png",
-    "TaskNotes/Tasks/Assets/Pasted image 20260121193341.png",
-    "TaskNotes/Tasks/Assets/Pasted image 20260121175414.png",
-    "Journals/2026-01-21.md",
-    "Journals/Assets/Pasted image 20260121172530.png",
-    "Journals/Assets/Pasted image 20260121172523.png",
-    "Journals/Assets/Pasted image 20260121172513.png",
-    "Journals/Assets",
-    "2026-01-21-Turning Observations into Assets with Obsidian and Generative AI.md",
-    "TaskNotes/Tasks/Assets/Pasted image 20260121164526.png",
-    "TaskNotes/Tasks/Assets",
-    "TaskNotes/Views/calendar-default.base",
-    "template/log.md",
-    "template/New Text Document.txt",
-    "template",
-    "New folder",
-    "Assets/Pasted image 20260121144744.png",
-    "Assets/260119-How to use Obsidian for daily logging.html",
-    "26-01-21-Turning Observations into Assets with Obsidian and Generative AI.md",
-    "Journals/2026-01-20.md",
-    "Journals/2026-01-22.md",
-    "templates/daily note.md",
-    "2026-01-20.md",
-    "Assets/Pasted image 20260119105334.png",
-    "Journals",
-    "journals",
-    "2026-01-19 Intellectual Production System.md",
-    "2026-01-19.md",
-    "2511C-English new grammer.md",
-    "TaskNotes/Views/tasks-default.base",
-=======
-  "active": "3aa191665a153c79",
-  "lastOpenFiles": [
-    "2026-01-19.md",
->>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
-    "2026-01-19 Intellectual Production Flow.md",
-    "TaskNotes/Tasks/Make an intellectual production system.md",
-    "TaskNotes/Tasks/how I can use task notes effectively.md",
-    "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
-    "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024.md",
-    "2026-01-19 Intellectual Production System.md",
-    "2026-01-19_Roles of Generative AI.md",
-<<<<<<< HEAD
-    "202-01-19_Roles of Generative AI.md",
-=======
-    "Assets/Pasted image 20260120205725.png",
-    "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024 - Note.md",
-    "2026-01-20.md",
-    "TaskNotes/Views/tasks-default.base",
-    "2511C-English new grammer.md",
-    "Untitled.md",
-    "Assets/Pasted image 20260115170706.png",
-    "Assets/Pasted image 20260115170732.png",
-    "Assets/Pasted image 20260115170751.png",
-    "Assets/Pasted image 20260119105334.png",
-    "Assets/Pasted image 20260119112836.png",
-    "Assets/Pasted image 20260119123550.png",
-    "Assets",
-    "images",
-    "New folder",
-    "templates",
-    "TaskNotes/Views/kanban-default.base",
-    "Pasted image 20260119123550.png",
-    "Pasted image 20260119123440.png",
-    "TaskNotes/Tasks",
-    "Pasted image 20260119112836.png",
-    "202-01-19_Roles of Generative AI.md",
-    "Untitled.base",
-    "TaskNotes/Views/agenda-default.base",
-    "TaskNotes/Views/calendar-default.base",
->>>>>>> 622116e6e727b3354226a3a29587c45ceaf03468
-    "Untitled.canvas",
-    "2026-01-15.md",
-    "2025-11-21.md",
-    "2025-11-20-Nodes.md",
-    "2511C-Journey.md",
-    "Handwrittens.md"
-  ]
+  "active": "6a828efbbae698f8",
+  "lastOpenFiles": []
 }
