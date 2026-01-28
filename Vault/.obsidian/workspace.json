@@ -4,17 +4,40 @@
     "type": "split",
     "children": [
       {
-        "id": "6eae545bfbc9ea6d",
+        "id": "acb565ca388605ec",
         "type": "tabs",
         "children": [
           {
-            "id": "6a828efbbae698f8",
+            "id": "f10f6ab3b45099a5",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "bases",
+              "state": {
+                "file": "TaskNotes/Views/tasks-default.base",
+                "viewName": "All Tasks"
+              },
+              "icon": "tasknotes-simple",
+              "title": "tasks-default"
+            }
+          }
+        ]
+      },
+      {
+        "id": "d314aa0e59151f97",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a7d99f3cdb9e0a35",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "template/log.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "log"
             }
           }
         ]
@@ -36,7 +59,7 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
+                "sortOrder": "byModifiedTime",
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
@@ -168,9 +191,30 @@
       "tasknotes:Open pomodoro": false,
       "tasknotes:Open pomodoro stats": false,
       "tasknotes:Create new task": false,
-      "templater-obsidian:Templater": false
+      "templater-obsidian:Templater": false,
+      "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "6a828efbbae698f8",
-  "lastOpenFiles": []
+  "active": "a7d99f3cdb9e0a35",
+  "lastOpenFiles": [
+    "TaskNotes/Views/tasks-default.base",
+    "2026-01-28-How to use a 'task' plugin.md",
+    "TaskNotes/Tasks/PRACTICE Use a 'task plugin task.md",
+    "TaskNotes/Views/agenda-default.base",
+    "TaskNotes/Views/mini-calendar-default.base",
+    "TaskNotes/Tasks/REFINE - Turning Observations into Assets with Obsidian and Generative AI.md",
+    "TaskNotes/Tasks/RESEARCH and Practice how to use Templater Plugin on Obsidian App.md",
+    "TaskNotes/Tasks/RESEARCH HOW we can use Gen AI for writing academic arguments.md",
+    "TaskNotes/Tasks/MBUILD - Make an intellectual production system.md",
+    "TaskNotes/Tasks/MBUILD - Make a slide of category on verbs.md",
+    "TaskNotes/Tasks/PRACTICE - how I can use task notes effectively.md",
+    "template/log.md",
+    "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024.md",
+    "Augmenting the Author - Exploring the Potential of AI Collaboration in Academic Writing 23 Apr 2024 - Note.md",
+    "TaskNotes/Views/calendar-default.base",
+    "Journals/2026-01-20 1.md",
+    "Journals/2026-01-28.md",
+    "Excalidraw/2026-01-27-Why-How-What The Golden Circle.md",
+    "Excalidraw"
+  ]
 }
