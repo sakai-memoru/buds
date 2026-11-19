@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLMとコンテキストの仕組み：生成AIから意図通りの成果物（Artifact）を引き出す設計論</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Noto Sans JP & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <!-- Font Awesome for clean icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --slide-width: 1280px;
+      --slide-height: 720px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-family: 'Inter', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', 'Noto Sans JP', monospace;
+    }
+
+    /* 16:9 ステージスケーリングコンテナ */
+    #viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: radial-gradient(circle at 50% 40%, #f8fafc 0%, #e2e8f0 100%);
+    }
+
+    #slide-stage {
+      width: 1280px;
+      height: 720px;
+      position: relative;
+      transform-origin: center center;
+      box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(148, 163, 184, 0.45);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    /* 背景グリッド装飾（白背景になじむ極薄ドット・グリッド） */
+    .bg-tech-grid {
+      background-image: 
+        linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* 各スライドの基本スタイル */
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 1280px;
+      height: 720px;
+      padding: 44px 56px 68px 56px;
+      display: flex;
+      flex-direction: column;
+      background-color: #ffffff;
+      color: #0f172a;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(24px);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .slide.prev {
+      opacity: 0;
+      transform: translateX(-24px);
+    }
+
+    /* ライトテーマ用サーフェスカード（高コントラスト境界線＋淡色背景） */
+    .glass-card {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+
+    .glass-card-cyan {
+      background: #f0f9ff;
+      border: 1.5px solid #7dd3fc;
+      border-radius: 14px;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.06);
+    }
+
+    .glass-card-indigo {
+      background: #eef2ff;
+      border: 1.5px solid #a5b4fc;
+      border-radius: 14px;
+      box-shadow: 0 2px 6px rgba(67, 56, 202, 0.06);
+    }
+
+    .glass-card-emerald {
+      background: #ecfdf5;
+      border: 1.5px solid #6ee7b7;
+      border-radius: 14px;
+      box-shadow: 0 2px 6px rgba(4, 120, 87, 0.06);
+    }
+
+    /* 下部コントロールバー（ライトテーマ仕様） */
+    #controls-bar {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 18px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1.5px solid #cbd5e1;
+      backdrop-filter: blur(12px);
+      border-radius: 9999px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.14);
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0369a1;
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* トッププログレスバー */
+    #progress-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: #e2e8f0;
+      z-index: 30;
+    }
+
+    #progress-fill {
+      height: 100%;
+      width: 11.11%;
+      background: linear-gradient(90deg, #0284c7, #4338ca, #047857);
+      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* パルスアニメーション */
+    @keyframes flowPulse {
+      0%, 100% { opacity: 0.65; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(2px); }
+    }
+    .animate-flow {
+      animation: flowPulse 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+<div id="viewport">
+  <!-- 16:9 固定解像度ステージ（JSで画面サイズに合わせて自動スケーリング） -->
+  <div id="slide-stage" class="bg-tech-grid">
+    <!-- プログレスバー -->
+    <div id="progress-track">
+      <div id="progress-fill"></div>
+    </div>
+
+    <!-- 背景の装飾グロー（白背景用ソフトティント） -->
+    <div class="pointer-events-none absolute -top-32 -left-32 w-96 h-96 rounded-full bg-sky-200/35 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-indigo-200/35 blur-3xl"></div>
+
+    <!-- =====================================================================
+         SLIDE 1: タイトルスライド
+         ===================================================================== -->
+    <section class="slide active justify-between bg-tech-grid" data-slide="1">
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase bg-sky-100 text-sky-900 border border-sky-300">
+          <i class="fa-solid fa-microchip text-sky-700"></i> Generative AI Architecture &amp; Context Engineering
+        </span>
+        <span class="text-xs font-bold text-slate-600 font-mono-code">SLIDE 01 / 09</span>
+      </div>
+
+      <div class="my-auto max-w-4xl">
+        <div class="inline-block mb-4 px-3.5 py-1.5 rounded-md bg-indigo-100 border border-indigo-300 text-indigo-900 text-sm font-bold">
+          ステートレスな推論エンジンと作業スペースの設計論
+        </div>
+        <h1 class="text-6xl font-black tracking-tight leading-tight text-slate-950 mb-5">
+          LLMとコンテキストの仕組み
+        </h1>
+        <p class="text-2xl font-extrabold text-blue-800 leading-relaxed mb-10">
+          生成AIから意図通りの成果物（Artifact）を引き出す設計論
+        </p>
+
+        <!-- 3つの柱のプレビューバッジ -->
+        <div class="grid grid-cols-3 gap-5 max-w-3xl">
+          <div class="glass-card p-4 flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-lg bg-sky-100 border border-sky-300 flex items-center justify-center text-sky-800 shrink-0">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-600">PART 01</div>
+              <div class="text-sm font-extrabold text-slate-900">ステートレスな推論原理</div>
+            </div>
+          </div>
+          <div class="glass-card p-4 flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-lg bg-indigo-100 border border-indigo-300 flex items-center justify-center text-indigo-800 shrink-0">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-600">PART 02</div>
+              <div class="text-sm font-extrabold text-slate-900">パラメータと容量の定量感</div>
+            </div>
+          </div>
+          <div class="glass-card p-4 flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-800 shrink-0">
+              <i class="fa-solid fa-compass-drafting"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-600">PART 03</div>
+              <div class="text-sm font-extrabold text-slate-900">再現性を生む3層設計</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-medium text-slate-700 border-t border-slate-300 pt-4">
+        <span>クリック または <kbd class="px-1.5 py-0.5 bg-slate-200 border border-slate-300 rounded font-bold text-slate-900">→</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-200 border border-slate-300 rounded font-bold text-slate-900">Space</kbd> キーで次へ進みます</span>
+        <span class="font-mono-code font-bold text-blue-800">Context Engineering Framework</span>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 2: 生成AIの基本構造：ステートレス関数としてのLLM
+         ===================================================================== -->
+    <section class="slide bg-tech-grid" data-slide="2">
+      <!-- ヘッダー -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <span class="text-xs font-extrabold tracking-wider uppercase text-blue-700">01. FUNDAMENTAL ARCHITECTURE</span>
+          <h2 class="text-3xl font-black text-slate-950 mt-1">1. 生成AIの基本構造：ステートレス関数としてのLLM</h2>
+        </div>
+        <span class="text-xs font-bold text-slate-600 font-mono-code">02 / 09</span>
+      </div>
+
+      <!-- コア数式バナー -->
+      <div class="glass-card-cyan p-6 mb-6 flex items-center justify-between">
+        <div>
+          <div class="text-xs font-extrabold uppercase tracking-wider text-sky-900 mb-1">Core Mathematical Model（基本動作式）</div>
+          <div class="text-3xl font-extrabold font-mono-code text-slate-950 tracking-tight">
+            次のトークン<span class="text-slate-700 text-lg font-semibold">（文字の断片）</span>
+            <span class="text-blue-700 mx-3">＝</span>
+            <span class="text-indigo-800">LLM</span><span class="text-slate-800">(</span><span class="text-emerald-800">コンテキスト</span><span class="text-slate-800">)</span>
+          </div>
+        </div>
+        <div class="text-right max-w-xs text-sm text-slate-800 leading-snug font-medium">
+          LLMは会話の記憶を持たない<br />
+          <strong class="text-blue-800 font-extrabold">「純粋な次単語予測マシン」</strong>である
+        </div>
+      </div>
+
+      <!-- 2カラム比較：誤解 vs 実際の動作 -->
+      <div class="grid grid-cols-2 gap-6 flex-1">
+        <!-- 左：一般的な誤解 -->
+        <div class="glass-card p-6 flex flex-col justify-between border-rose-300 bg-rose-50/40">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-100 border border-rose-300 text-rose-900 text-xs font-extrabold mb-4">
+              <i class="fa-solid fa-xmark text-rose-700"></i> よくある誤解（ステートフルな人間モデル）
+            </div>
+            <h3 class="text-xl font-extrabold text-slate-950 mb-3">「AIが過去の会話を覚えている」</h3>
+            <p class="text-sm text-slate-800 leading-relaxed mb-5 font-medium">
+              AIの内部にセッションごとの記憶領域があり、2ターン目以降は「さっきの続き」だけを差分として送っているとイメージしがちです。
+            </p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-300 font-mono-code text-xs text-slate-800 space-y-2 shadow-inner">
+            <div>Turn 1: User「申請方法は？」 → AI（内部に記憶）</div>
+            <div>Turn 2: User「期限はいつ？」 → AI（記憶から回答？）</div>
+            <div class="text-rose-800 font-bold pt-1">※ 実際にはLLM単体に状態（State）は一切残らない</div>
+          </div>
+        </div>
+
+        <!-- 右：実際の動作 -->
+        <div class="glass-card-emerald p-6 flex flex-col justify-between">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-400 text-emerald-950 text-xs font-extrabold mb-4">
+              <i class="fa-solid fa-check text-emerald-700"></i> 実際の動作（ステートレス再入力モデル）
+            </div>
+            <h3 class="text-xl font-extrabold text-slate-950 mb-3">「毎回、全履歴を束ねて丸ごと再入力している」</h3>
+            <p class="text-sm text-slate-800 leading-relaxed mb-5 font-medium">
+              チャットアプリ（システム）側が、過去のやり取り・システム指示・参照資料を<strong class="text-slate-950">1本のテキスト（コンテキスト）に連結</strong>し、毎ターン最初からLLMへ渡し直しています。
+            </p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-emerald-300 font-mono-code text-xs text-slate-900 space-y-2 shadow-inner">
+            <div><span class="text-emerald-800 font-bold">Turn 1:</span> LLM([指示 + Q1]) → A1</div>
+            <div><span class="text-emerald-800 font-bold">Turn 2:</span> LLM([指示 + Q1 + A1 + Q2]) → A2</div>
+            <div class="text-blue-800 font-bold pt-1">→ 1トークン生成するたびに文脈全体から続きを予測</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 3: 脳（LLM）と作業机（コンテキスト）の役割分担
+         ===================================================================== -->
+    <section class="slide bg-tech-grid" data-slide="3">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <span class="text-xs font-extrabold tracking-wider uppercase text-blue-700">02. MENTAL MODEL</span>
+          <h2 class="text-3xl font-black text-slate-950 mt-1">脳（LLM）と作業机（コンテキスト）の役割分担</h2>
+        </div>
+        <span class="text-xs font-bold text-slate-600 font-mono-code">03 / 09</span>
+      </div>
+
+      <div class="grid grid-cols-12 gap-6 flex-1 items-stretch">
+        <!-- 左側：コンテキスト（作業机の上の書類一式）7カラム -->
+        <div class="col-span-7 glass-card p-5 flex flex-col justify-between border-sky-300 bg-slate-50">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-table-columns text-blue-700"></i> コンテキスト（作業机の上の1本の長いテキスト）
+            </span>
+            <span class="text-xs px-2.5 py-1 rounded bg-sky-100 border border-sky-300 text-sky-900 font-mono-code font-bold">短期記憶・作業スペース</span>
+          </div>
+
+          <div class="space-y-2.5 my-auto">
+            <!-- [1] システムプロンプト -->
+            <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-300 flex items-start gap-3">
+              <span class="px-2 py-0.5 rounded bg-indigo-700 text-white font-mono-code text-xs font-bold shrink-0">[1]</span>
+              <div class="text-xs">
+                <div class="font-extrabold text-indigo-950 text-sm">システムプロンプト（AIの役割・前提ルール）</div>
+                <div class="text-slate-800 mt-0.5 font-mono-code">例：「あなたは親切なITエンジニアです。簡潔に回答してください。」</div>
+              </div>
+            </div>
+
+            <!-- [2] 外部知識・参照データ -->
+            <div class="p-3 rounded-xl bg-sky-50 border border-sky-300 flex items-start gap-3">
+              <span class="px-2 py-0.5 rounded bg-sky-700 text-white font-mono-code text-xs font-bold shrink-0">[2]</span>
+              <div class="text-xs">
+                <div class="font-extrabold text-sky-950 text-sm">外部知識・参照データ（RAG等で検索して貼った資料）</div>
+                <div class="text-slate-800 mt-0.5 font-mono-code">例：「社内マニュアル：有給休暇は前日までにポータルから申請…」</div>
+              </div>
+            </div>
+
+            <!-- [3] 会話履歴 -->
+            <div class="p-3 rounded-xl bg-white border border-slate-300 flex items-start gap-3">
+              <span class="px-2 py-0.5 rounded bg-slate-700 text-white font-mono-code text-xs font-bold shrink-0">[3]</span>
+              <div class="text-xs">
+                <div class="font-extrabold text-slate-900 text-sm">会話履歴（これまでのユーザーとAIの全発言）</div>
+                <div class="text-slate-800 mt-0.5 font-mono-code">User: 申請方法を教えて ／ AI: 社内ポータルから申請できます。</div>
+              </div>
+            </div>
+
+            <!-- [4] 今回のユーザー入力 -->
+            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-400 flex items-start gap-3">
+              <span class="px-2 py-0.5 rounded bg-emerald-700 text-white font-mono-code text-xs font-bold shrink-0">[4]</span>
+              <div class="text-xs">
+                <div class="font-extrabold text-emerald-950 text-sm">今回のユーザー入力（最新の質問・指示）</div>
+                <div class="text-slate-800 mt-0.5 font-mono-code">User: 期限はいつまで？</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-xs font-semibold text-slate-700 text-right mt-2">
+            ※ [1]〜[4] が上から順に連結され、丸ごとLLMへ入力される
+          </div>
+        </div>
+
+        <!-- 中央矢印 & 右側：LLM（脳・推論エンジン）5カラム -->
+        <div class="col-span-5 flex flex-col justify-between gap-4">
+          <div class="glass-card-indigo p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-sm font-extrabold text-indigo-950 flex items-center gap-2">
+                  <i class="fa-solid fa-brain text-indigo-700"></i> LLM（脳・推論エンジン）
+                </span>
+                <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-200 border border-indigo-300 text-indigo-950 font-mono-code font-bold">事前学習済み</span>
+              </div>
+              <p class="text-sm text-slate-800 leading-relaxed mb-4 font-medium">
+                事前学習で獲得した<strong class="text-slate-950">「言語の法則や一般知識」</strong>を使い、作業机に置かれたテキストの<strong class="text-indigo-900">「最も自然な続き」</strong>を1トークンずつ予測します。
+              </p>
+            </div>
+
+            <!-- 入力→生成フロー図 -->
+            <div class="bg-white rounded-xl p-4 border border-indigo-200 space-y-2.5 shadow-sm">
+              <div class="flex items-center gap-2 text-xs text-blue-800 font-mono-code font-bold">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                <span>INPUT: [1] + [2] + [3] + [4] を一括読込</span>
+              </div>
+              <div class="h-px bg-slate-200"></div>
+              <div class="flex items-center gap-2 text-xs text-indigo-800 font-mono-code font-bold">
+                <i class="fa-solid fa-gears"></i>
+                <span>PROCESS: 確率分布から次トークンを計算</span>
+              </div>
+              <div class="h-px bg-slate-200"></div>
+              <div class="bg-emerald-50 border-2 border-emerald-500 rounded-lg p-3">
+                <div class="text-[11px] text-emerald-900 font-extrabold mb-1">OUTPUT（1トークンずつ生成）</div>
+                <div class="font-mono-code text-sm text-slate-950 font-extrabold">
+                  AI : 前日までに申請してください。
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 対比サマリーボックス -->
+          <div class="glass-card p-4 border-l-4 border-l-blue-700 bg-slate-50">
+            <div class="text-xs font-extrabold text-blue-800 mb-1">設計の本質</div>
+            <p class="text-xs text-slate-800 leading-relaxed font-medium">
+              LLM（脳）の知識は固定されているため、実務では<strong class="text-slate-950">「限られた作業机（コンテキスト）に何をどう並べるか」</strong>が品質のすべてを決めます。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 4: 基本構造から説明できる3つの現象（表形式・カード融合）
+         ===================================================================== -->
+    <section class="slide bg-tech-grid" data-slide="4">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-xs font-extrabold tracking-wider uppercase text-blue-700">03. DERIVED PHENOMENA</span>
+          <h2 class="text-3xl font-black text-slate-950 mt-1">基本構造から説明できる3つの現象</h2>
+        </div>
+        <span class="text-xs font-bold text-slate-600 font-mono-code">04 / 09</span>
+      </div>
+
+      <p class="text-sm text-slate-800 font-medium mb-4">
+        「ステートレスなLLM × 有限の作業机（コンテキスト）」というシンプルモデルを押さえると、実務で遭遇するAIの弱点や挙動がすべて論理的に説明できます。
+      </p>
+
+      <!-- 表形式レイアウト（白背景・高コントラスト） -->
+      <div class="glass-card overflow-hidden flex-1 flex flex-col justify-between bg-white">
+        <table class="w-full h-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider">
+              <th class="py-3.5 px-5 w-72">生成AIの挙動・現象</th>
+              <th class="py-3.5 px-5">シンプルモデルでの仕組み上の理由</th>
+              <th class="py-3.5 px-5 w-64">実務上の対策アプローチ</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-300 text-sm">
+            <!-- 現象 1 -->
+            <tr class="bg-white hover:bg-amber-50/40">
+              <td class="py-4 px-5 align-top">
+                <span class="inline-block px-2 py-0.5 rounded bg-amber-100 border border-amber-400 text-amber-950 font-mono-code text-[11px] font-bold mb-1.5">Context Overflow</span>
+                <div class="font-extrabold text-base text-slate-950 leading-snug">
+                  会話が長くなると<br />最初の指示を忘れる
+                </div>
+              </td>
+              <td class="py-4 px-5 align-top text-slate-800 leading-relaxed font-medium">
+                コンテキストには<strong class="text-slate-950">「コンテキストウィンドウ」</strong>と呼ばれる容量上限（トークン数の枠）があります。会話が積み重なり枠から溢れると、古い情報から切り捨てられ（押し出され）、LLMの視界から完全に消えるためです。
+              </td>
+              <td class="py-4 px-5 align-top bg-amber-50/60 border-l border-slate-200">
+                <div class="text-xs font-extrabold text-amber-900 mb-1"><i class="fa-solid fa-wrench mr-1"></i>対策</div>
+                <div class="text-xs text-slate-800 font-medium leading-relaxed">
+                  不要な履歴の要約・リセット、重要ルールのシステムプロンプト固定
+                </div>
+              </td>
+            </tr>
+
+            <!-- 現象 2 -->
+            <tr class="bg-slate-50/60 hover:bg-rose-50/40">
+              <td class="py-4 px-5 align-top">
+                <span class="inline-block px-2 py-0.5 rounded bg-rose-100 border border-rose-400 text-rose-950 font-mono-code text-[11px] font-bold mb-1.5">Hallucination</span>
+                <div class="font-extrabold text-base text-slate-950 leading-snug">
+                  最新情報や社内データについて<br />嘘をつく（ハルシネーション）
+                </div>
+              </td>
+              <td class="py-4 px-5 align-top text-slate-800 leading-relaxed font-medium">
+                LLM本体の知識は<strong class="text-slate-950">事前学習時点で固定</strong>されています。コンテキストの <code class="px-1.5 py-0.5 rounded bg-sky-100 text-sky-950 font-mono-code font-bold text-xs">[2] 参照データ</code> 領域に資料を貼らない限り、LLMは「もっともらしい続きの言葉」を確率的推測で穴埋めしてしまいます。
+              </td>
+              <td class="py-4 px-5 align-top bg-rose-50/60 border-l border-slate-200">
+                <div class="text-xs font-extrabold text-rose-900 mb-1"><i class="fa-solid fa-wrench mr-1"></i>対策</div>
+                <div class="text-xs text-slate-800 font-medium leading-relaxed">
+                  RAGによる根拠資料の注入、「資料にないことは答えない」制限の明記
+                </div>
+              </td>
+            </tr>
+
+            <!-- 現象 3 -->
+            <tr class="bg-white hover:bg-indigo-50/40">
+              <td class="py-4 px-5 align-top">
+                <span class="inline-block px-2 py-0.5 rounded bg-indigo-100 border border-indigo-400 text-indigo-950 font-mono-code text-[11px] font-bold mb-1.5">Lost-in-the-Middle</span>
+                <div class="font-extrabold text-base text-slate-950 leading-snug">
+                  長文の真ん中にある<br />情報を見落とす
+                </div>
+              </td>
+              <td class="py-4 px-5 align-top text-slate-800 leading-relaxed font-medium">
+                コンテキストが長大になると、モデルの注意機構（Self-Attention）が分散します。結果として、文章の<strong class="text-slate-950">最初（先頭）と最後（末尾）に比べて中間の情報の重みが薄れやすく</strong>なります。
+              </td>
+              <td class="py-4 px-5 align-top bg-indigo-50/60 border-l border-slate-200">
+                <div class="text-xs font-extrabold text-indigo-900 mb-1"><i class="fa-solid fa-wrench mr-1"></i>対策</div>
+                <div class="text-xs text-slate-800 font-medium leading-relaxed">
+                  情報の厳選・構造化、最重要指示の先頭または末尾への配置
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 5: 2. LLMの規模：「パラメータ数」とは？
+         ===================================================================== -->
+    <section class="slide bg-tech-grid" data-slide="5">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <span class="text-xs font-extrabold tracking-wider uppercase text-blue-700">04. MODEL SCALE &amp; PARAMETERS</span>
+          <h2 class="text-3xl font-black text-slate-950 mt-1">2. LLMの規模：「パラメータ数」とは？</h2>
+        </div>
+        <span class="text-xs font-bold text-slate-600 font-mono-code">05 / 09</span>
+      </div>
+
+      <!-- 上段：定義バナー -->
+      <div class="glass-card p-4 mb-5 flex items-center justify-between border-l-4 border-l-indigo-700 bg-slate-50">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-indigo-100 border border-indigo-300 flex items-center justify-center text-indigo-800 text-xl shrink-0">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div>
+            <div class="text-base font-extrabold text-slate-950">パラメータ数 ＝ 脳の規模・知識量（ニューラルネットワーク内の「重み」の総数）</div>
+            <div class="text-xs text-slate-800 mt-0.5 font-medium">事前学習で獲得した言語パターンや知識はすべてこの数値として格納。単位は <strong class="text-blue-800 font-mono-code font-extrabold">B（Billion＝10億）</strong> / <strong class="text-indigo-800 font-mono-code font-extrabold">T（Trillion＝1兆）</strong> で表記。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 中段：規模別3分類 -->
+      <div class="grid grid-cols-3 gap-5 mb-5 flex-1">
+        <!-- 小規模 -->
+        <div class="glass-card p-5 flex flex-col justify-between bg-white">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-extrabold px-2.5 py-1 rounded bg-sky-100 border border-sky-300 text-sky-950">小規模モデル</span>
+              <span class="font-mono-code text-lg font-black text-sky-800">〜 10B 前後</span>
+            </div>
+            <div class="text-xs text-slate-600 font-mono-code font-bold mb-3">〜 約100億パラメータ</div>
+            <p class="text-sm text-slate-800 leading-relaxed font-medium">
+              スマートフォンやPC単体（ローカル環境）でも動作する軽量モデル。定型処理・分類・簡単な要約に向き、<strong class="text-slate-950">応答が極めて高速かつ低コスト</strong>です。
+            </p>
+          </div>
+          <div class="mt-3 pt-2.5 border-t border-slate-200 text-xs font-bold text-sky-900">
+            用途：エッジ処理、高速ルーティング、定型抽出
+          </div>
+        </div>
+
+        <!-- 中規模 -->
+        <div class="glass-card p-5 flex flex-col justify-between bg-white">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-extrabold px-2.5 py-1 rounded bg-indigo-100 border border-indigo-300 text-indigo-950">中規模モデル</span>
+              <span class="font-mono-code text-lg font-black text-indigo-800">30B 〜 100B</span>
+            </div>
+            <div class="text-xs text-slate-600 font-mono-code font-bold mb-3">300億 〜 1,000億パラメータ</div>
+            <p class="text-sm text-slate-800 leading-relaxed font-medium">
+              一般的なビジネス業務、文書作成、プログラミング支援で高い実用性を持つ<strong class="text-slate-950">コストと知能のバランス型</strong>です。
+            </p>
+          </div>
+          <div class="mt-3 pt-2.5 border-t border-slate-200 text-xs font-bold text-indigo-900">
+            用途：業務アシスタント、コード生成、RAG応答
+          </div>
+        </div>
+
+        <!-- 大規模 -->
+        <div class="glass-card p-5 flex flex-col justify-between bg-white">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-extrabold px-2.5 py-1 rounded bg-emerald-100 border border-emerald-400 text-emerald-950">大規模・フロンティア</span>
+              <span class="font-mono-code text-lg font-black text-emerald-800">数百B 〜 1T超</span>
+            </div>
+            <div class="text-xs text-slate-600 font-mono-code font-bold mb-3">数千億 〜 1兆パラメータ超（※商用最上位は非公開多数）</div>
+            <p class="text-sm text-slate-800 leading-relaxed font-medium">
+              複雑な多段階論理推論、高度な専門知識、曖昧な指示からの意図汲み取りをこなす最上位クラスです。
+            </p>
+          </div>
+          <div class="mt-3 pt-2.5 border-t border-slate-200 text-xs font-bold text-emerald-900">
+            用途：複雑設計、高度分析、自律型エージェント
+          </div>
+        </div>
+      </div>
+
+      <!-- 下段：MoEアーキテクチャ補足 -->
+      <div class="glass-card-cyan p-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <span class="px-3 py-1.5 rounded-lg bg-sky-700 font-mono-code text-xs font-extrabold text-white shrink-0">
+            TREND: MoE (Mixture of Experts)
+          </span>
+          <p class="text-xs text-slate-900 leading-relaxed font-medium">
+            近年は全パラメータを毎回計算するのではなく、入力内容に応じて必要な一部の専門家ネットワーク（Expert）だけを動かす<strong class="text-slate-950 font-extrabold">MoE構造</strong>が主流。「総パラメータ数は巨大だが、実際に動く（アクティブな）パラメータは一部だけ」という高効率化が進んでいます。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 6: コンテキストのサイズと日本語文字数換算
+         ===================================================================== -->
+    <section class="slide bg-tech-grid" data-slide="6">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-xs font-extrabold tracking-wider uppercase text-blue-700">05. CONTEXT WINDOW &amp; TOKENS</span>
+          <h2 class="text-3xl font-black text-slate-950 mt-1">コンテキストのサイズと日本語文字数換算</h2>
+        </div>
+        <span class="text-xs font-bold text-slate-600 font-mono-code">06 / 09</span>
+      </div>
+
+      <!-- トークン換算ルール -->
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="glass-card px-4 py-2.5 flex items-center justify-between bg-slate-50">
+          <span class="text-xs font-extrabold text-slate-800"><i class="fa-solid fa-language text-blue-700 mr-2"></i>英語のトークン換算目安</span>
+          <span class="font-mono-code text-sm font-extrabold text-blue-800">1 トークン ≒ 約 4 文字（約 0.75 単語）</span>
+        </div>
+        <div class="glass-card px-4 py-2.5 flex items-center justify-between bg-slate-50">
+          <span class="text-xs font-extrabold text-slate-800"><i class="fa-solid fa-font text-emerald-700 mr-2"></i>日本語のトークン換算目安</span>
+          <span class="font-mono-code text-sm font-extrabold text-emerald-800">1 文字 ≒ 0.8〜1.5 トークン（ほぼ 1文字≒1トークン）</span>
+        </div>
+      </div>
+
+      <!-- 容量早見テーブル -->
+      <div class="glass-card overflow-hidden mb-4 bg-white">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-900 text-white text-xs font-extrabold uppercase">
+              <th class="py-2.5 px-4 w-36">サイズ表記</th>
+              <th class="py-2.5 px-4 w-44">トークン数</th>
+              <th class="py-2.5 px-4 w-52">日本語の文字数目安</th>
+              <th class="py-2.5 px-4">具体的な分量のイメージ</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 text-sm">
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 px-4 font-mono-code font-extrabold text-slate-900">4K 〜 8K</td>
+              <td class="py-2.5 px-4 font-mono-code font-semibold text-slate-800">4,000 〜 8,000</td>
+              <td class="py-2.5 px-4 font-mono-code font-bold text-blue-800">約 3,000 〜 8,000 文字</td>
+              <td class="py-2.5 px-4 text-slate-800 font-medium">A4用紙 2〜5枚分（短いレポートやメール数通）</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 px-4 font-mono-code font-extrabold text-slate-900">32K</td>
+              <td class="py-2.5 px-4 font-mono-code font-semibold text-slate-800">32,000</td>
+              <td class="py-2.5 px-4 font-mono-code font-bold text-blue-800">約 2万 〜 3.2万 文字</td>
+              <td class="py-2.5 px-4 text-slate-800 font-medium">新書 1/3冊分（長めの企画書・詳細議事録）</td>
+            </tr>
+            <tr class="bg-indigo-50/75 hover:bg-indigo-100/60">
+              <td class="py-2.5 px-4 font-mono-code font-black text-indigo-900">128K 〜 200K</td>
+              <td class="py-2.5 px-4 font-mono-code font-bold text-slate-900">12.8万 〜 20万</td>
+              <td class="py-2.5 px-4 font-mono-code font-extrabold text-indigo-900">約 8.5万 〜 20万 文字</td>
+              <td class="py-2.5 px-4 text-slate-950 font-bold">文庫本・新書 約1〜1.5冊分（現在の標準ライン）</td>
+            </tr>
+            <tr class="bg-emerald-50/75 hover:bg-emerald-100/60">
+              <td class="py-2.5 px-4 font-mono-code font-black text-emerald-900">1M</td>
+              <td class="py-2.5 px-4 font-mono-code font-bold text-slate-900">100万</td>
+              <td class="py-2.5 px-4 font-mono-code font-extrabold text-emerald-900">約 65万 〜 100万 文字</td>
+              <td class="py-2.5 px-4 text-slate-950 font-bold">長編小説 約5〜8冊分、または中規模コードベース数万行</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-2.5 px-4 font-mono-code font-extrabold text-sky-900">2M</td>
+              <td class="py-2.5 px-4 font-mono-code font-semibold text-slate-800">200万</td>
+              <td class="py-2.5 px-4 font-mono-code font-bold text-sky-900">約 130万 〜 200万 文字</td>
+              <td class="py-2.5 px-4 text-slate-800 font-medium">大規模リポジトリ全体や数年分のチャットログ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 運用上の2つの注意点 -->
+      <div class="grid grid-cols-2 gap-4 mt-auto">
+        <div class="glass-card p-3.5 border-l-4 border-l-amber-600 bg-amber-50/60">
+          <div class="text-xs font-extrabold text-amber-950 mb-1">
+            <i class="fa-solid fa-triangle-exclamation text-amber-700 mr-1"></i> 注意点①：「入力 ＋ 出力」の合計枠である
+          </div>
+          <p class="text-xs text-slate-800 leading-relaxed font-medium">
+            上限128Kのモデルに125K分の資料を入れると、AIが回答を出力する空きスペースは残り3K分しかありません。
+          </p>
+        </div>
+        <div class="glass-card p-3.5 border-l-4 border-l-rose-600 bg-rose-50/60">
+          <div class="text-xs font-extrabold text-rose-950 mb-1">
+            <i class="fa-solid fa-gauge-high text-rose-700 mr-1"></i> 注意点②：「入る」ことと「正確に処理できる」は別
+          </div>
+          <p class="text-xs text-slate-800 leading-relaxed font-medium">
+            上限ギリギリまで詰め込むと遅延・コスト増に加え、中盤の検索精度が低下します。必要な情報だけを厳選する設計が不可欠です。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 7: 3. 意図通りのArtifactを生む「コンテキスト設計」
+         ===================================================================== -->
+    <section class="slide bg-tech-grid" data-slide="7">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-xs font-extrabold tracking-wider uppercase text-emerald-800">06. CONTEXT ENGINEERING ARCHITECTURE</span>
+          <h2 class="text-3xl font-black text-slate-950 mt-1">3. 意図通りのArtifactを生む「コンテキスト設計」</h2>
+        </div>
+        <span class="text-xs font-bold text-slate-600 font-mono-code">07 / 09</span>
+      </div>
+
+      <p class="text-xs text-slate-800 font-medium mb-4">
+        作業机（コンテキスト）の上に<strong class="text-slate-950">「指示書（ルール）」「教科書（Framework）」「手順書（SKILL）」の3層パッケージ</strong>を構造化して並べることで、AIの勝手な推測を排除します。
+      </p>
+
+      <!-- 3層構造ダイアグラム + 統合出力フロー -->
+      <div class="grid grid-cols-12 gap-5 flex-1 items-center">
+        <!-- 左8カラム：3層パッケージ -->
+        <div class="col-span-8 space-y-3">
+          <!-- Layer 1 -->
+          <div class="glass-card-cyan p-4 relative">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="inline-flex items-center gap-2 text-sm font-extrabold text-sky-950">
+                <span class="px-2 py-0.5 rounded bg-sky-700 text-white font-mono-code text-xs">【1】</span>
+                コンテキスト本体の指示（タスクの設計図・ガードレール）
+              </span>
+              <span class="text-[11px] font-mono-code font-bold text-sky-800">Policy &amp; Guardrails</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-xs mt-2">
+              <div class="bg-white p-2.5 rounded-lg border border-sky-300">
+                <div class="font-extrabold text-slate-950 mb-0.5">目的 / 形式・スタイル</div>
+                <div class="text-slate-700 text-[11px] font-medium">ゴールと出力見た目の定義</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-sky-300">
+                <div class="font-extrabold text-slate-950 mb-0.5">業務・タスクルール / 制限</div>
+                <div class="text-slate-700 text-[11px] font-medium">判断基準と厳格な禁止事項</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-sky-300">
+                <div class="font-extrabold text-slate-950 mb-0.5">成果の検証内容</div>
+                <div class="text-slate-700 text-[11px] font-medium">出力前のセルフチェック基準</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Layer 2 -->
+          <div class="glass-card-indigo p-4">
+            <div class="flex items-center justify-between mb-1">
+              <span class="inline-flex items-center gap-2 text-sm font-extrabold text-indigo-950">
+                <span class="px-2 py-0.5 rounded bg-indigo-700 text-white font-mono-code text-xs">【2】</span>
+                <code class="font-mono-code bg-white px-1.5 py-0.5 rounded border border-indigo-300 text-indigo-900">references/</code>（参照すべき知識・型：Framework）
+              </span>
+              <span class="text-[11px] font-mono-code font-bold text-indigo-800">Static Knowledge</span>
+            </div>
+            <p class="text-xs text-slate-800 mt-1 font-medium">
+              構成テンプレート、評価軸、過去の成功事例、専門フレームワークを明示的に配置。<br />
+              <span class="text-indigo-900 font-extrabold">→「何をもとに、どんな骨組みで書くか」の根拠（Knowledge）を提供</span>
+            </p>
+          </div>
+
+          <!-- Layer 3 -->
+          <div class="glass-card-emerald p-4">
+            <div class="flex items-center justify-between mb-1">
+              <span class="inline-flex items-center gap-2 text-sm font-extrabold text-emerald-950">
+                <span class="px-2 py-0.5 rounded bg-emerald-700 text-white font-mono-code text-xs">【3】</span>
+                <code class="font-mono-code bg-white px-1.5 py-0.5 rounded border border-emerald-400 text-emerald-900">skills/</code>（特定タスクの実行手順・ノウハウ：SKILL）
+              </span>
+              <span class="text-[11px] font-mono-code font-bold text-emerald-800">Dynamic Procedure</span>
+            </div>
+            <p class="text-xs text-slate-800 mt-1 font-medium">
+              作業ステップ、ツールの使い方、特有の変換ルール、計算ロジックをパッケージ化。<br />
+              <span class="text-emerald-900 font-extrabold">→「どうやって作業を進めるか」の専門手順書（Procedure）を提供</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- 右4カラム：統合処理とArtifact出力 -->
+        <div class="col-span-4 flex flex-col items-center justify-center h-full">
+          <div class="glass-card p-5 w-full flex flex-col items-center text-center bg-slate-50 border-slate-300">
+            <div class="text-xs font-mono-code font-bold text-slate-700 mb-2">【1】＋【2】＋【3】を一括入力</div>
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-700 to-indigo-800 flex items-center justify-center text-white text-2xl shadow-md mb-2">
+              <i class="fa-solid fa-microchip"></i>
+            </div>
+            <div class="text-base font-black text-slate-950">LLM 推論エンジン</div>
+            <div class="text-xs text-slate-700 font-semibold mt-1">設計図・型・手順を統合処理</div>
+
+            <div class="my-3.5 text-emerald-700 text-xl animate-flow">
+              <i class="fa-solid fa-angles-down"></i>
+            </div>
+
+            <div class="w-full p-4 rounded-xl bg-emerald-50 border-2 border-emerald-600 shadow-sm">
+              <div class="text-xs font-mono-code font-extrabold text-emerald-800 uppercase mb-1">HIGH-PRECISION OUTPUT</div>
+              <div class="text-lg font-black text-slate-950">
+                ユーザー意図に沿った<br />Artifact（成果物）
+              </div>
+              <div class="text-[11px] text-slate-800 font-semibold mt-2">
+                誰が実行しても同じ高品質・一貫性を再現
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 8: 3つの要素が「ブレ」を封じ込めるメカニズム
+         ===================================================================== -->
+    <section class="slide bg-tech-grid" data-slide="8">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <span class="text-xs font-extrabold tracking-wider uppercase text-emerald-800">07. ENTROPY REDUCTION MECHANISM</span>
+          <h2 class="text-3xl font-black text-slate-950 mt-1">3つの要素が「ブレ」を封じ込めるメカニズム</h2>
+        </div>
+        <span class="text-xs font-bold text-slate-600 font-mono-code">08 / 09</span>
+      </div>
+
+      <p class="text-sm text-slate-800 font-medium mb-6">
+        AIの出力が意図から外れる最大の原因はコンテキスト内の<strong class="text-slate-950">「情報の曖昧さ」</strong>です。空白があると、LLMは確率的に「世の中でよくある無難なパターン」で穴埋めしてしまいます。
+      </p>
+
+      <div class="grid grid-cols-3 gap-6 flex-1">
+        <!-- カラム1：What / Why -->
+        <div class="glass-card-cyan p-6 flex flex-col justify-between">
+          <div>
+            <div class="inline-block px-3 py-1 rounded-full bg-sky-700 font-mono-code text-xs font-extrabold text-white mb-3">
+              1. What / Why の固定
+            </div>
+            <h3 class="text-xl font-extrabold text-slate-950 mb-2">ルールと検証による<br />ガードレール</h3>
+            <p class="text-xs text-sky-900 font-bold mb-4">対象：コンテキスト本体の指示領域</p>
+            <ul class="space-y-2.5 text-xs text-slate-800 leading-relaxed font-medium">
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-sky-700 mt-0.5"></i>
+                <span><strong class="text-slate-950">目的・スタイル：</strong>着地点を固定し、一般的なブログ風文章への逃避を防止。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-sky-700 mt-0.5"></i>
+                <span><strong class="text-slate-950">タスク制限：</strong>「やってはいけないこと」が余計な推測を止める強力なブレーキに。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-sky-700 mt-0.5"></i>
+                <span><strong class="text-slate-950">検証基準：</strong>出力前の自己点検により制約漏れや形式崩れを激減。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-sky-300 text-xs font-extrabold text-sky-950">
+            効果：ゴールのブレと脱線を封じる
+          </div>
+        </div>
+
+        <!-- カラム2：Structure / Basis -->
+        <div class="glass-card-indigo p-6 flex flex-col justify-between">
+          <div>
+            <div class="inline-block px-3 py-1 rounded-full bg-indigo-700 font-mono-code text-xs font-extrabold text-white mb-3">
+              2. Structure / Basis の固定
+            </div>
+            <h3 class="text-xl font-extrabold text-slate-950 mb-2">Framework による<br />思考の骨組み固定</h3>
+            <p class="text-xs text-indigo-900 font-bold mb-4">対象：<code class="font-mono-code bg-white px-1 rounded border border-indigo-300">references/</code> ディレクトリ</p>
+            <ul class="space-y-2.5 text-xs text-slate-800 leading-relaxed font-medium">
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-indigo-700 mt-0.5"></i>
+                <span><strong class="text-slate-950">構成テンプレート：</strong>ゼロから構成を考えさせず、毎回同じ論理構造を維持。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-indigo-700 mt-0.5"></i>
+                <span><strong class="text-slate-950">評価軸・基準表：</strong>判断の拠り所（Basis）を明示し、品質のばらつきを解消。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-indigo-700 mt-0.5"></i>
+                <span><strong class="text-slate-950">穴埋めタスク化：</strong>「用意された枠組みに今回のデータを当てはめる」確実な作業へ変換。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-indigo-300 text-xs font-extrabold text-indigo-950">
+            効果：構成の揺らぎと根拠不足を封じる
+          </div>
+        </div>
+
+        <!-- カラム3：How -->
+        <div class="glass-card-emerald p-6 flex flex-col justify-between">
+          <div>
+            <div class="inline-block px-3 py-1 rounded-full bg-emerald-700 font-mono-code text-xs font-extrabold text-white mb-3">
+              3. How の固定
+            </div>
+            <h3 class="text-xl font-extrabold text-slate-950 mb-2">SKILL による<br />実行手順・技能の固定</h3>
+            <p class="text-xs text-emerald-900 font-bold mb-4">対象：<code class="font-mono-code bg-white px-1 rounded border border-emerald-400">skills/</code> ディレクトリ</p>
+            <ul class="space-y-2.5 text-xs text-slate-800 leading-relaxed font-medium">
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-700 mt-0.5"></i>
+                <span><strong class="text-slate-950">動的プロセス定義：</strong>「抽出→分類→変換→出力」の思考ステップを順序立てて固定。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-700 mt-0.5"></i>
+                <span><strong class="text-slate-950">専門職への特化：</strong>汎用LLMを一時的に「その業務専用の熟練職人」へ変貌させる。</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-700 mt-0.5"></i>
+                <span><strong class="text-slate-950">部品化と効率性：</strong>必要な技能だけを呼び出し、トークン消費を最適化。</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-emerald-300 text-xs font-extrabold text-emerald-950">
+            効果：処理手順の自己流アレンジを封じる
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SLIDE 9: まとめ：コンテキスト・エンジニアリングの本質
+         ===================================================================== -->
+    <section class="slide justify-between bg-tech-grid" data-slide="9">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-extrabold tracking-wider uppercase text-emerald-800">08. CONCLUSION &amp; TAKEAWAY</span>
+        <span class="text-xs font-bold text-slate-600 font-mono-code">09 / 09</span>
+      </div>
+
+      <div class="my-auto">
+        <h2 class="text-4xl font-black text-slate-950 mb-6 leading-tight">
+          まとめ：コンテキスト・エンジニアリングの本質
+        </h2>
+
+        <!-- メインメッセージカード -->
+        <div class="glass-card-cyan p-8 mb-8 border-2 border-sky-500 relative overflow-hidden">
+          <div class="absolute right-6 top-6 text-6xl text-sky-700/10 pointer-events-none">
+            <i class="fa-solid fa-quote-right"></i>
+          </div>
+          <p class="text-2xl font-extrabold text-slate-950 leading-relaxed mb-4">
+            LLMが勝手な解釈を挟む隙間を<span class="text-blue-800 underline decoration-sky-400 decoration-4 underline-offset-4">構造的に塞ぎ</span>、<br />
+            必要な知識と技能だけを過不足なく作業机に並べることで、<br />
+            <span class="text-emerald-800">誰が実行しても意図に忠実なArtifactを安定生成できる。</span>
+          </p>
+          <p class="text-sm text-slate-800 font-medium">
+            生成AI活用の鍵は、LLMの頭脳を魔法のように扱うことではなく、ステートレスな推論マシンに対して「完璧な業務パッケージ」を渡すエンジニアリングにあります。
+          </p>
+        </div>
+
+        <!-- 3つのアクション要点 -->
+        <div class="grid grid-cols-3 gap-5">
+          <div class="glass-card p-5 bg-white">
+            <div class="text-xs font-mono-code text-blue-800 font-extrabold mb-1">KEY POINT 01</div>
+            <div class="text-base font-extrabold text-slate-950 mb-1.5">LLMは予測装置と割り切る</div>
+            <p class="text-xs text-slate-800 leading-relaxed font-medium">
+              記憶も空気を読む力もない純粋関数である前提に立ち、必要な文脈はすべて明示的にコンテキストへ載せる。
+            </p>
+          </div>
+          <div class="glass-card p-5 bg-white">
+            <div class="text-xs font-mono-code text-indigo-800 font-extrabold mb-1">KEY POINT 02</div>
+            <div class="text-base font-extrabold text-slate-950 mb-1.5">作業机の広さと精度を意識する</div>
+            <p class="text-xs text-slate-800 leading-relaxed font-medium">
+              入出力の合計トークン枠と中盤の見落とし（Lost-in-the-Middle）を踏まえ、情報を構造化して厳選する。
+            </p>
+          </div>
+          <div class="glass-card p-5 bg-white">
+            <div class="text-xs font-mono-code text-emerald-800 font-extrabold mb-1">KEY POINT 03</div>
+            <div class="text-base font-extrabold text-slate-950 mb-1.5">ルール × Framework × SKILL</div>
+            <p class="text-xs text-slate-800 leading-relaxed font-medium">
+              境界線（ルール）・型（references/）・手順（skills/）の3層分離で、属人性のない高品質な出力を標準化する。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs font-semibold text-slate-700 border-t border-slate-300 pt-4">
+        <span>Thank you for your attention.</span>
+        <button id="restart-btn" class="text-blue-800 hover:text-blue-950 font-extrabold flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-rotate-left"></i> 最初のスライドに戻る
+        </button>
+      </div>
+    </section>
+
+  </div><!-- /#slide-stage -->
+</div><!-- /#viewport -->
+
+<!-- 下部操作ナビゲーションバー -->
+<div id="controls-bar">
+  <button id="prev-btn" class="nav-btn" title="前のスライド (←)">
+    <i class="fa-solid fa-chevron-left"></i> 前へ
+  </button>
+
+  <div class="flex items-center gap-2 px-3 font-mono-code text-sm font-extrabold text-slate-900">
+    <span id="current-page" class="text-blue-700">1</span>
+    <span class="text-slate-500">/</span>
+    <span id="total-pages">9</span>
+  </div>
+
+  <button id="next-btn" class="nav-btn" title="次のスライド (→ / Space)">
+    次へ <i class="fa-solid fa-chevron-right"></i>
+  </button>
+
+  <div class="h-4 w-px bg-slate-300 mx-1"></div>
+
+  <button id="fullscreen-btn" class="nav-btn" title="フルスクリーン切替 (F)">
+    <i class="fa-solid fa-expand" id="fullscreen-icon"></i>
+  </button>
+
+  <span class="hidden md:inline-block text-[11px] font-semibold text-slate-700 ml-1">
+    操作: ← → / Space / 画面クリック
+  </span>
+</div>
+
+<script>
+  (function () {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+
+    const stage = document.getElementById('slide-stage');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const currentPageEl = document.getElementById('current-page');
+    const totalPagesEl = document.getElementById('total-pages');
+    const progressFill = document.getElementById('progress-fill');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const fullscreenIcon = document.getElementById('fullscreen-icon');
+
+    totalPagesEl.textContent = totalSlides;
+
+    /**
+     * 16:9 (1280x720) のステージを現在のウィンドウサイズに合わせて等倍スケーリング
+     */
+    function resizeStage() {
+      const baseWidth = 1280;
+      const baseHeight = 720;
+      const padding = 24; // 上下左右の余白確保
+      const availableWidth = window.innerWidth - padding;
+      const availableHeight = window.innerHeight - padding;
+
+      const scaleX = availableWidth / baseWidth;
+      const scaleY = availableHeight / baseHeight;
+      const scale = Math.min(scaleX, scaleY);
+
+      stage.style.transform = `scale(${scale})`;
+    }
+
+    /**
+     * 指定インデックスのスライドへ遷移
+     */
+    function goToSlide(index) {
+      if (index < 0 || index >= totalSlides) return;
+      currentIndex = index;
+
+      slides.forEach((slide, idx) => {
+        slide.classList.remove('active', 'prev');
+        if (idx === currentIndex) {
+          slide.classList.add('active');
+        } else if (idx < currentIndex) {
+          slide.classList.add('prev');
+        }
+      });
+
+      // UI更新
+      currentPageEl.textContent = currentIndex + 1;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === totalSlides - 1;
+
+      const progressPercent = ((currentIndex + 1) / totalSlides) * 100;
+      progressFill.style.width = `${progressPercent}%`;
+    }
+
+    function nextSlide() {
+      if (currentIndex < totalSlides - 1) {
+        goToSlide(currentIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        goToSlide(currentIndex - 1);
+      }
+    }
+
+    /**
+     * フルスクリーン切り替え
+     */
+    function toggleFullscreen() {
+      try {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      } catch (err) {
+        console.warn('Fullscreen API is restricted in this environment:', err);
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        fullscreenIcon.classList.remove('fa-expand');
+        fullscreenIcon.classList.add('fa-compress');
+      } else {
+        fullscreenIcon.classList.remove('fa-compress');
+        fullscreenIcon.classList.add('fa-expand');
+      }
+      setTimeout(resizeStage, 50);
+    });
+
+    // ボタンイベント
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      prevSlide();
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextSlide();
+    });
+
+    if (restartBtn) {
+      restartBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        goToSlide(0);
+      });
+    }
+
+    fullscreenBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleFullscreen();
+    });
+
+    // ステージクリックで次スライドへ（ボタンやテキスト選択は除外）
+    stage.addEventListener('click', (e) => {
+      if (e.target.closest('button') || e.target.closest('a')) return;
+      const rect = stage.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      // 左端20%クリックで戻る、それ以外は進む
+      if (clickX < rect.width * 0.2) {
+        prevSlide();
+      } else {
+        nextSlide();
+      }
+    });
+
+    // キーボード操作（矢印キー、スペースキー、PageUp/Down、Home/End、Fキー）
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowRight':
+        case ' ':
+        case 'PageDown':
+        case 'Enter':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+        case 'Backspace':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides - 1);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+      }
+    });
+
+    // タッチスワイプ対応
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }, { passive: true });
+
+    // 初期化とリサイズ監視
+    window.addEventListener('resize', resizeStage);
+    window.onload = function () {
+      resizeStage();
+      goToSlide(0);
+    };
+  })();
+</script>
+</body>
+</html>
