@@ -1,0 +1,233 @@
+{
+  "main": {
+    "id": "fd3c006bc2456223",
+    "type": "split",
+    "children": [
+      {
+        "id": "c90742575ab03305",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0879e5a1fe32ea1b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Chattings/2611C-Obsidian Features Guide.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2611C-Obsidian Features Guide"
+            }
+          },
+          {
+            "id": "78c55abad569f6e8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Chattings/2611C-Obsidian Features Guide.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2611C-Obsidian Features Guide"
+            }
+          }
+        ],
+        "currentTab": 1
+      },
+      {
+        "id": "7cda6078c3346098",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5a832fc4cdf21587",
+            "type": "leaf",
+            "state": {
+              "type": "marp-preview-view",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Deck Preview"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "50963713c06c9940",
+    "type": "split",
+    "children": [
+      {
+        "id": "8bb130ac83fffa3d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9777e70f0901d8e7",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "4df4db1a2c0231de",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "cf36b4e2ee707de5",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "37fa3a6d5d486477",
+    "type": "split",
+    "children": [
+      {
+        "id": "81c29a1a9e71cf59",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "dc3036e60d07168b",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Chattings/2611C-Obsidian Features Guide.md",
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "201c9e912a36e813",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Chattings/2611C-Obsidian Features Guide.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "a1e599a9c2239c75",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "57bd76020146312b",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "45d85aa2040273b1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Chattings/2611C-Obsidian Features Guide.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "workspaces:Manage workspace layouts": false,
+      "zk-prefixer:Create new unique note": false,
+      "random-note:Open random note": false,
+      "marp-slides:Show Slide Preview": false
+    }
+  },
+  "active": "201c9e912a36e813",
+  "lastOpenFiles": [
+    "notes/Workspace.md",
+    "Chattings/2611C-Obsidian Features Guide.md",
+    "notes/Quick Switcher.md",
+    "notes",
+    "Chattings",
+    "Inbox",
+    "Welcome.md"
+  ]
+}
