@@ -196,7 +196,20 @@
     .animate-flow {
       animation: flowPulse 2s infinite ease-in-out;
     }
-  </style>
+  
+  /* Print: one slide per page + strong text colors */
+  @media print {
+    @page { size: 16in 9in; margin: 0; }
+    html, body { margin:0!important; padding:0!important; width:auto!important; height:auto!important; overflow:visible!important; background:#fff!important; color:#000!important; user-select:auto!important; -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; }
+    #viewport { display:block!important; width:auto!important; height:auto!important; background:#fff!important; }
+    #slide-stage { width:auto!important; height:auto!important; transform:none!important; position:static!important; overflow:visible!important; border-radius:0!important; box-shadow:none!important; background:#fff!important; }
+    .slide, .slide.active, .slide.prev { position:relative!important; inset:auto!important; display:flex!important; width:1280px!important; height:720px!important; opacity:1!important; pointer-events:auto!important; transform:none!important; transition:none!important; overflow:hidden!important; page-break-after:always!important; break-after:page!important; page-break-inside:avoid!important; break-inside:avoid-page!important; background-color:#fff!important; color:#0f172a!important; -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; }
+    .slide:last-of-type { page-break-after:auto!important; break-after:auto!important; }
+    #controls-bar, #progress-track { display:none!important; }
+    .text-slate-500, .text-slate-600 { color:#334155!important; } .text-slate-700 { color:#1e293b!important; } .text-slate-800, .text-slate-900, .text-slate-950 { color:#0f172a!important; }
+    .text-blue-700, .text-blue-800 { color:#1e40af!important; } .text-sky-700, .text-sky-800, .text-sky-900, .text-sky-950 { color:#075985!important; } .text-indigo-700, .text-indigo-800, .text-indigo-900, .text-indigo-950 { color:#3730a3!important; } .text-emerald-700, .text-emerald-800, .text-emerald-900, .text-emerald-950 { color:#065f46!important; } .text-rose-700, .text-rose-800, .text-rose-900, .text-rose-950 { color:#9f1239!important; } .text-amber-700, .text-amber-800, .text-amber-900, .text-amber-950 { color:#92400e!important; } .text-white { color:#fff!important; }
+  }
+</style>
 </head>
 <body>
 

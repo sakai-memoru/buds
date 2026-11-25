@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>軽いモデルでも正しいコードを書く — Deep Thinking とエッジケース</title>
+  <style>
+    :root {
+      --text: #111111;
+      --muted: #222222;
+      --accent: #0b3d91;
+      --border: #333333;
+      --bg: #ffffff;
+      --card: #f4f6f8;
+      --warn: #7a1f1f;
+      --ok: #0d4f2b;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+      font-size: 18px;
+      line-height: 1.55;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide {
+      width: 100%;
+      min-height: 100vh;
+      padding: 48px 56px;
+      page-break-after: always;
+      break-after: page;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .slide:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    .slide-number {
+      position: absolute;
+      bottom: 24px;
+      right: 40px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin: 0 0 16px;
+      color: var(--text);
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      margin: 0 0 20px;
+      color: var(--accent);
+      font-weight: 800;
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin: 18px 0 8px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    p, li {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+      font-weight: 600;
+    }
+
+    ul, ol {
+      margin: 8px 0 12px 0;
+      padding-left: 1.4em;
+    }
+
+    li { margin-bottom: 8px; }
+
+    .card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin: 12px 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 2px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    th {
+      background: #e8eef7;
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    code, .mono {
+      font-family: "Consolas", "Source Han Code JP", "Menlo", monospace;
+      font-size: 0.92em;
+      background: #eef1f5;
+      padding: 1px 6px;
+      border: 1px solid #bbb;
+      border-radius: 3px;
+      color: #000;
+      font-weight: 600;
+    }
+
+    pre {
+      background: #f0f2f5;
+      border: 2px solid var(--border);
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: #000;
+      font-weight: 600;
+      white-space: pre-wrap;
+    }
+
+    .tag {
+      display: inline-block;
+      border: 2px solid var(--border);
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 6px;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .tag-ok { border-color: var(--ok); color: var(--ok); }
+    .tag-warn { border-color: var(--warn); color: var(--warn); }
+
+    .title-slide {
+      justify-content: center;
+      text-align: left;
+    }
+
+    .title-slide h1 {
+      font-size: 2.4rem;
+      border: none;
+      color: var(--text);
+    }
+
+    .footer-note {
+      margin-top: auto;
+      padding-top: 24px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .checklist li::marker {
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        color: #000;
+      }
+      .slide {
+        min-height: 100vh;
+        page-break-after: always;
+        break-after: page;
+        padding: 36px 40px;
+      }
+      .slide:last-child {
+        page-break-after: auto;
+      }
+      h1, h2, h3, p, li, th, td, code, pre {
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      h2 {
+        border-bottom-color: #000 !important;
+      }
+      th {
+        background: #ddd !important;
+      }
+      .card, pre, code {
+        background: #f2f2f2 !important;
+        border-color: #000 !important;
+      }
+      a { color: #000 !important; text-decoration: underline; }
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 12mm;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1 -->
+  <section class="slide title-slide">
+    <div>
+      <p class="tag">LLM × プログラミング</p>
+      <h1>軽いモデルでも正しいコードを書く</h1>
+      <p class="subtitle">
+        重いモデル / 軽いモデルの違い、<strong>Deep Thinking</strong>の意味、<br />
+        エッジケースを踏まえた指示の出し方
+      </p>
+      <div class="card">
+        <strong>本日のゴール</strong>
+        <ul>
+          <li>中間サイズのモデルでも論理的なコードが書ける理由を理解する</li>
+          <li>Deep Thinking（深い思考）の中身を整理する</li>
+          <li>軽いモデルでも品質を上げるための指示テンプレートを持ち帰る</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-number">1 / 15</div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <h2>重いモデルと軽いモデル</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>重いモデル</h3>
+        <ul>
+          <li>パラメータ数が非常に大きい（兆規模も）</li>
+          <li>コンテキストも長い</li>
+          <li>長距離の一貫性・稀な組み合わせに強い</li>
+          <li>自己批判・自己修正の質が高い</li>
+          <li>コスト・レイテンシが大きい</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>軽いモデル</h3>
+        <ul>
+          <li>パラメータ数が小さい／中間</li>
+          <li>局所的なパターンには強い</li>
+          <li>長文一貫性や深い検証は弱め</li>
+          <li>速い・安い</li>
+          <li>プロンプト設計の影響が大きい</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:18px;">
+      言語モデルは学習データから作られた<strong>言語空間（多様体）</strong>上で次トークンを予測する。<br />
+      重いモデルはその「面」の解像度が高く、軽いモデルは粗い、というイメージが近い。
+    </p>
+    <div class="slide-number">2 / 15</div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <h2>プログラミングは「中間モデル」でも戦える</h2>
+    <p>プログラミングの多くは、<strong>論理が閉じた狭い領域</strong>に落ちる。</p>
+    <ul>
+      <li>文法・型・よくある設計パターンは学習データに大量にある</li>
+      <li>仕様が明確なら「探索・検索」で正しい実装に到達しやすい</li>
+      <li>アーキテクチャやクラス構造が固定されていると、自由度が下がり精度が上がる</li>
+    </ul>
+    <div class="card">
+      <strong>ポイント</strong><br />
+      「正しいコードを書ける」ことと、<br />
+      「そのコードが本当に正しい理由まで深く検証している」ことは別物。<br />
+      軽いモデルは前者に強く、後者は弱い。
+    </div>
+    <p>したがって、<strong>仕様・制約・受け入れ条件を人間が先に固める</strong>ほど、軽いモデルの成功率は上がる。</p>
+    <div class="slide-number">3 / 15</div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <h2>Deep Thinking とは何か</h2>
+    <p>単なる「ステップバイステップで書いて」ではない。</p>
+    <div class="card">
+      <strong>Deep Thinking（深い思考）</strong>
+      <ol>
+        <li>複数の計画・仮説を立てる</li>
+        <li>それぞれを批判的に評価する</li>
+        <li>矛盾がないかを確認する</li>
+        <li>必要なら仮説を捨て、別の道を探す</li>
+        <li>最終的な答えに至るまで自己修正を続ける</li>
+      </ol>
+    </div>
+    <p>
+      モデル側では、最終回答の前に長い思考過程（Chain-of-Thought）を生成し、<br />
+      <strong>正しさ（検証可能な結果）を報酬</strong>に思考の質そのものを学習している、という仕組みが多い。
+    </p>
+    <div class="slide-number">4 / 15</div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <h2>速い思考と深い思考</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>観点</th>
+          <th>速い思考（軽いモデル寄り）</th>
+          <th>深い思考（Deep Thinking）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>動作</td>
+          <td>パターンマッチで即座に出力</td>
+          <td>複数仮説を探索してから出力</td>
+        </tr>
+        <tr>
+          <td>検証</td>
+          <td>表面的・局所的</td>
+          <td>矛盾検出・軌道修正が強い</td>
+        </tr>
+        <tr>
+          <td>計算量</td>
+          <td>ほぼ固定・短い</td>
+          <td>問題の難しさに応じて長く考える</td>
+        </tr>
+        <tr>
+          <td>得意</td>
+          <td>定型実装、CRUD、変換処理</td>
+          <td>曖昧要件、複合制約、設計判断</td>
+        </tr>
+        <tr>
+          <td>苦手</td>
+          <td>エッジケースの網羅、長期影響</td>
+          <td>コスト・待ち時間</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>軽いモデルに CoT を強制しても、<strong>検証そのものの質の上限</strong>はモデル能力に依存する。</p>
+    <div class="slide-number">5 / 15</div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <h2>RLHF と Deep Thinking の違い（要点）</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>従来の RLHF</h3>
+        <ul>
+          <li>目的：人間の好みに沿う回答</li>
+          <li>報酬：好み・安全性・指示追従</li>
+          <li>最適化対象：最終出力の好ましさ</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Deep Thinking 系</h3>
+        <ul>
+          <li>目的：正しい答えに至る思考</li>
+          <li>報酬：正しさ（数学・テスト通過など）</li>
+          <li>最適化対象：思考過程の質と戦略</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:16px;">
+      つまり Deep Thinking は「深いフィードバックをたくさん与えた RLHF」というより、<br />
+      <strong>思考そのものを、正しさを軸に強化学習した能力</strong>に近い。
+    </p>
+    <div class="slide-number">6 / 15</div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <h2>軽いモデルの弱点：検証が弱い</h2>
+    <p>プログラミングで軽いモデルを使うとき、次が起きやすい。</p>
+    <ul>
+      <li>正常系は通るが、<strong>異常系・境界値</strong>が抜けている</li>
+      <li>「正しそうなコード」を出す（コンパイルは通るが業務的にズレる）</li>
+      <li>仕様の曖昧さを補完してしまい、意図と違う前提が混入する</li>
+      <li>複数制約の同時最適化が粗い</li>
+    </ul>
+    <div class="card">
+      <span class="tag tag-warn">重要</span>
+      深いモデルが内部でやっている「仮説の批判的検証」を、<br />
+      軽いモデルでは<strong>人間が仕様と指示で肩代わりする</strong>必要がある。
+    </div>
+    <div class="slide-number">7 / 15</div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <h2>エッジケースとは何か</h2>
+    <p>
+      エッジケース＝<strong>正常系の外側、しかし現実に起こりうる入力・状態・順序</strong>。<br />
+      「まれ」でも、本番では必ず踏まれる。
+    </p>
+    <h3>考える軸（4つ）</h3>
+    <ol>
+      <li><strong>境界値</strong> … 0, 1, 最大, 最大+1, 空, null</li>
+      <li><strong>異常系</strong> … 存在しないID、権限なし、形式不正</li>
+      <li><strong>同時性・順序</strong> … 二重送信、古いデータでの更新</li>
+      <li><strong>関連データの不整合</strong> … 親削除済み、論理削除の混入</li>
+    </ol>
+    <div class="card">
+      仕様が「正常系中心」だと、軽いモデルは正常系だけをきれいに実装する。<br />
+      エッジケースは<strong>仕様に書くか、指示で明示する</strong>必要がある。
+    </div>
+    <div class="slide-number">8 / 15</div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <h2>エッジケース具体例① 入力・バリデーション</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ケース</th>
+          <th>例</th>
+          <th>起きやすい問題</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>空文字と null</td>
+          <td>必須項目に <code>""</code> / <code>null</code></td>
+          <td>片方だけ弾く</td>
+        </tr>
+        <tr>
+          <td>前後空白</td>
+          <td>名前の前後スペース</td>
+          <td>検索・一意制約で破綻</td>
+        </tr>
+        <tr>
+          <td>長さ境界</td>
+          <td>上限ちょうど / 上限+1</td>
+          <td>off-by-one</td>
+        </tr>
+        <tr>
+          <td>数値境界</td>
+          <td>0、負数、小数</td>
+          <td>0許可の仕様漏れ</td>
+        </tr>
+        <tr>
+          <td>日付境界</td>
+          <td>今日、うるう年、TZまたぎ</td>
+          <td>条件判定のズレ</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-number">9 / 15</div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <h2>エッジケース具体例② データ・状態</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ケース</th>
+          <th>例</th>
+          <th>起きやすい問題</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>存在しないID</td>
+          <td>削除済み主キー</td>
+          <td>null返却か例外かが曖昧</td>
+        </tr>
+        <tr>
+          <td>一意制約</td>
+          <td>同じコードで再登録</td>
+          <td>事前チェック漏れ</td>
+        </tr>
+        <tr>
+          <td>自分自身の更新</td>
+          <td>名前変更で「重複」判定</td>
+          <td>自分を除外していない</td>
+        </tr>
+        <tr>
+          <td>状態遷移</td>
+          <td>下書き→完了の直遷移</td>
+          <td>不正遷移を通す</td>
+        </tr>
+        <tr>
+          <td>同時更新</td>
+          <td>在庫の二重引き当て</td>
+          <td>上書き・不整合</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-number">10 / 15</div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <h2>軽いモデルへの指示：4点セット</h2>
+    <p>深い検証の代わりに、次の4つを毎回明示する。</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>1. Context（背景・制約）</h3>
+        <ul>
+          <li>技術スタック・配置場所</li>
+          <li>既存の層・禁止事項</li>
+          <li>優先順位（正しさ＞速度 等）</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>2. Assumption（前提）</h3>
+        <ul>
+          <li>入力範囲・nullの扱い</li>
+          <li>外部依存の挙動</li>
+          <li>エッジケース方針</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>3. Goal（達成内容）</h3>
+        <ul>
+          <li>何を実現するか</li>
+          <li>成功の定義</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>4. Outcome（成果物）</h3>
+        <ul>
+          <li>コード形式・テスト有無</li>
+          <li>受け入れ条件の箇条書き</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-number">11 / 15</div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide">
+    <h2>指示例：バリデーション実装</h2>
+    <pre>Context:
+- Application Service の createOrder に実装
+- フレームワークのバリデーション機構を使う
+- 外部ライブラリ追加禁止
+
+Assumption:
+- customerName: 必須、1〜100文字、前後空白は trim する
+- amount: 必須、整数、1〜999999。0 と負数はエラー
+- null と空文字はどちらも必須エラー（メッセージは共通でよい）
+
+Goal:
+- 注文作成の入力検証を仕様どおりに行う
+
+Outcome:
+- 検証関数とユニットテスト
+- 正常系1件、異常系（空文字・null・0・上限+1）をテストに含める
+- エラーメッセージは日本語で固定文言</pre>
+    <p>境界と異常系を<strong>数値・文言レベルで書く</strong>ことが要点。</p>
+    <div class="slide-number">12 / 15</div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide">
+    <h2>指示例：更新と重複チェック</h2>
+    <pre>Context:
+- UserRepository の updateName(userId, name) を実装
+- DB には unique(name) 制約あり
+
+Assumption:
+- name は trim 後 1〜50文字
+- 重複チェック時は「自分の userId は除外」する
+- 大文字小文字は区別する（仕様どおり）
+- 存在しない userId は NotFound を返す
+
+Goal:
+- ユーザー名を安全に更新する
+
+Outcome:
+- 実装コード + テスト
+- ケース: 正常更新 / 他人と重複 / 自分と同じ名前 / 存在しないID
+- 例外型とメッセージを明記</pre>
+    <div class="card">
+      「自分を除外する」ような<strong>暗黙知</strong>は、軽いモデルは自力で補完しにくい。<br />
+      仕様に1行書くだけで失敗率が大きく下がる。
+    </div>
+    <div class="slide-number">13 / 15</div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide">
+    <h2>実装前に揃える設計成果物</h2>
+    <p>コーディングを狭い論理空間に落とすための最小セット。</p>
+    <ul class="checklist">
+      <li>ユースケース（基本・例外フロー）</li>
+      <li>業務ルール一覧（ID付き）</li>
+      <li>IPO（Input / Process / Output）</li>
+      <li>CRUDマトリクス（更新責任の明確化）</li>
+      <li>入力項目とバリデーション詳細（境界値・異常系付き）</li>
+      <li>状態遷移（ステータスがある場合）</li>
+      <li>正常系＋代表的な異常系の入出力例</li>
+    </ul>
+    <div class="card">
+      アーキテクチャとDB設計を人間が固定し、<br />
+      業務仕様（入力・検証・リポジトリ契約）を渡せば、<br />
+      <strong>中間〜軽いモデルでも実装品質は実用レベルに近づく</strong>。
+    </div>
+    <div class="slide-number">14 / 15</div>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide">
+    <h2>まとめ：実務チェックリスト</h2>
+    <div class="card">
+      <ol>
+        <li>設計判断・曖昧要件は深いモデル（または人間）で固める</li>
+        <li>実装は仕様を狭くして軽い／中間モデルに渡す</li>
+        <li>毎回 Context / Assumption / Goal / Outcome を書く</li>
+        <li>境界値・null・自分自身・不正遷移を仕様に明記する</li>
+        <li>受け入れ条件に異常系テストを含める</li>
+        <li>「正しそう」で終わらせず、異常系レビューを人間が残す</li>
+      </ol>
+    </div>
+    <p style="margin-top:20px;">
+      <strong>Deep Thinking の代替は、モデルに丸投げすることではない。</strong><br />
+      仮説検証のうち「仕様化できる部分」を人間が先に行い、<br />
+      残った狭い実装空間をモデルに任せることである。
+    </p>
+    <p class="footer-note">End of slides — 印刷時は各スライドが改ページされます（A4横推奨）</p>
+    <div class="slide-number">15 / 15</div>
+  </section>
+
+</body>
+</html>

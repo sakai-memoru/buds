@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生成AI時代のシニアアーキテクト — 業界知の整理と表出化</title>
+  <style>
+    /* ===== Screen (dark theme) ===== */
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Hiragino Sans", "Noto Sans JP", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      padding: 48px 64px;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    .slide.active { display: flex; }
+    .slide-number {
+      position: absolute;
+      bottom: 24px;
+      right: 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--accent);
+    }
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 20px 0 10px;
+      color: var(--accent2);
+    }
+    p, li { font-size: 1.15rem; }
+    ul { padding-left: 1.4em; margin: 12px 0; }
+    li { margin-bottom: 10px; }
+    .subtitle { color: var(--muted); font-size: 1.2rem; margin-bottom: 32px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin: 12px 0;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 16px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .tag {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      margin-right: 8px;
+    }
+    .highlight { color: var(--accent); font-weight: 600; }
+    .note {
+      margin-top: 28px;
+      padding: 16px 20px;
+      background: rgba(129, 140, 248, 0.1);
+      border-left: 4px solid var(--accent2);
+      border-radius: 0 8px 8px 0;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+    .nav {
+      position: fixed;
+      bottom: 24px;
+      left: 40px;
+      display: flex;
+      gap: 12px;
+      z-index: 100;
+    }
+    .nav button {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .nav button:hover { border-color: var(--accent); color: var(--accent); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 1rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th { background: var(--card); color: var(--accent); }
+    .title-slide {
+      text-align: center;
+      align-items: center;
+    }
+    .title-slide h1 { font-size: 2.8rem; }
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .flow-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .flow-arrow { color: var(--accent); font-size: 1.4rem; }
+
+    /* ===== Print styles ===== */
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 12mm;
+      }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #111111 !important;
+        overflow: visible !important;
+        margin: 0;
+        padding: 0;
+      }
+      .nav {
+        display: none !important;
+      }
+      .slide {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 8mm 10mm !important;
+        margin: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        background: #ffffff !important;
+        color: #111111 !important;
+        position: relative;
+        box-shadow: none !important;
+      }
+      .slide:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
+      .slide-number {
+        position: absolute;
+        bottom: 6mm;
+        right: 10mm;
+        color: #555555 !important;
+        font-size: 11pt !important;
+      }
+      h1 {
+        font-size: 22pt !important;
+        color: #111111 !important;
+        margin-bottom: 10pt !important;
+      }
+      h2 {
+        font-size: 18pt !important;
+        color: #0b5cad !important;   /* 濃い青で印刷でもはっきり */
+        margin-bottom: 12pt !important;
+      }
+      h3 {
+        font-size: 13pt !important;
+        color: #1e3a8a !important;   /* 濃いインディゴ */
+        margin: 10pt 0 6pt !important;
+      }
+      p, li {
+        font-size: 11pt !important;
+        color: #111111 !important;
+        line-height: 1.5 !important;
+      }
+      .subtitle {
+        color: #333333 !important;
+        font-size: 12pt !important;
+        margin-bottom: 14pt !important;
+      }
+      .card {
+        background: #f8fafc !important;
+        border: 1px solid #94a3b8 !important;
+        border-radius: 6px !important;
+        padding: 10pt 12pt !important;
+        margin: 8pt 0 !important;
+        color: #111111 !important;
+      }
+      .tag {
+        background: #e0f2fe !important;
+        color: #0369a1 !important;
+        border: 1px solid #7dd3fc !important;
+        padding: 2pt 8pt !important;
+        font-size: 9pt !important;
+      }
+      .highlight {
+        color: #0b5cad !important;
+        font-weight: 700 !important;
+      }
+      .note {
+        background: #f1f5f9 !important;
+        border-left: 4px solid #1e40af !important;
+        color: #1e293b !important;
+        margin-top: 12pt !important;
+        padding: 8pt 12pt !important;
+        font-size: 10pt !important;
+      }
+      table {
+        font-size: 10pt !important;
+        margin-top: 8pt !important;
+      }
+      th, td {
+        border: 1px solid #64748b !important;
+        padding: 6pt 8pt !important;
+        color: #111111 !important;
+      }
+      th {
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+      }
+      .flow-item {
+        background: #f8fafc !important;
+        border: 1px solid #94a3b8 !important;
+        color: #111111 !important;
+        padding: 6pt 10pt !important;
+        font-size: 10pt !important;
+      }
+      .flow-arrow {
+        color: #0b5cad !important;
+      }
+      .grid-2, .grid-3 {
+        gap: 10pt !important;
+      }
+      .title-slide h1 {
+        font-size: 26pt !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slide 1: Title -->
+  <div class="slide active title-slide">
+    <span class="tag">生成AI時代 / シニアアーキテクト</span>
+    <h1>業界知の整理と表出化</h1>
+    <p class="subtitle">過去の蓄積を「進化のシーズ」に変えるために<br>60歳からのライフワークとしての知識デジタル化</p>
+    <div class="note" style="max-width: 640px; text-align: left;">
+      IT・Design・認知工学・OOD + Design Thinking・Process Thinking を軸に、<br>
+      生成AIを相棒として暗黙知を顕在化する実践ガイド
+    </div>
+    <div class="slide-number">1 / 15</div>
+  </div>
+
+  <!-- Slide 2: Why now -->
+  <div class="slide">
+    <h2>なぜ今、シニアの知識を表出化するのか</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>従来の見方</h3>
+        <ul>
+          <li>過去の遺産・個人の経験</li>
+          <li>属人性が高く継承が難しい</li>
+          <li>若手には「翻訳」が必要</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>生成AI時代の見方</h3>
+        <ul>
+          <li><span class="highlight">進化のシーズ（種子）</span></li>
+          <li>新しい設計手法と融合可能</li>
+          <li>仕様駆動開発の「質」を決める核</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">
+      シニアが持つ「状況依存の判断」「失敗から学んだ感覚」は、<br>
+      AIが生成する仕様やコードの<span class="highlight">正しさと深み</span>を決める決定的な要素になる。
+    </p>
+    <div class="slide-number">2 / 15</div>
+  </div>
+
+  <!-- Slide 3: What seniors must understand -->
+  <div class="slide">
+    <h2>シニアが理解すべき生成AI時代の変化</h2>
+    <ul>
+      <li><strong>設計と実装の比率の逆転</strong>：設計8割・実装2割へ（仕様駆動開発の浸透）</li>
+      <li><strong>仕様が「正」になる</strong>：曖昧なプロンプトではなく、構造化された仕様がAIの入力になる</li>
+      <li><strong>AIは「どう書くか」は得意、「何を・なぜ・どこまで」は不得意</strong></li>
+      <li><strong>経験知の価値が上がる</strong>：エッジケース、失敗パターン、認知負荷、業務文脈</li>
+      <li><strong>表出化の手段が劇的に進化</strong>：対話による知識引き出しが可能になった</li>
+    </ul>
+    <div class="note">
+      単なる「知識のデジタル化」ではなく、「経験知を次世代とAIが使える形に翻訳する」作業が中心になる。
+    </div>
+    <div class="slide-number">3 / 15</div>
+  </div>
+
+  <!-- Slide 4: SDD -->
+  <div class="slide">
+    <h2>仕様駆動開発（SDD）の位置づけ</h2>
+    <p style="margin-bottom: 16px;">2025〜2026年に急速に広がった実践的手法</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3>1. Spec-first</h3>
+        <p>仕様を先に書き、AIに実装させる</p>
+      </div>
+      <div class="card">
+        <h3>2. 設計比率の逆転</h3>
+        <p>設計8割・実装2割を現実のものに</p>
+      </div>
+      <div class="card">
+        <h3>3. 主なツール</h3>
+        <p>GitHub Spec Kit / AWS Kiro / OpenSpec など</p>
+      </div>
+    </div>
+    <p class="note">
+      仕様の質が成果物の質を決める。<br>
+      その「質」を支えるのが、シニアの暗黙知である。
+    </p>
+    <div class="slide-number">4 / 15</div>
+  </div>
+
+  <!-- Slide 5: Fusion -->
+  <div class="slide">
+    <h2>既知と最新知の融合フレーム</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>層</th>
+          <th>シニアの既知</th>
+          <th>最新の設計知</th>
+          <th>融合後の姿</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>原則</td>
+          <td>OOD・認知負荷・DT</td>
+          <td>Constitution / Invariants</td>
+          <td>経験に裏打ちされた憲法</td>
+        </tr>
+        <tr>
+          <td>要件</td>
+          <td>失敗事例・例外・文脈</td>
+          <td>構造化仕様 / EARS</td>
+          <td>現場感のある仕様</td>
+        </tr>
+        <tr>
+          <td>設計判断</td>
+          <td>ヒューリスティック</td>
+          <td>Plan / 制約</td>
+          <td>判断基準の明示化</td>
+        </tr>
+        <tr>
+          <td>検証</td>
+          <td>「使われない仕様」の経験</td>
+          <td>自動検証・ドリフト検出</td>
+          <td>二重チェックの仕組み</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-number">5 / 15</div>
+  </div>
+
+  <!-- Slide 6: Overall workflow -->
+  <div class="slide">
+    <h2>知識表出化の基本ワークフロー</h2>
+    <div class="flow">
+      <div class="flow-item">1. ボサボサメモ</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item">2. AI対話で表出化</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item">3. 4000字程度の記述</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item">4. HTMLスライド化</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item">5. 図解＋精査</div>
+    </div>
+    <div class="card" style="margin-top: 28px;">
+      <p><strong>設計思想</strong>：生成AIを「知識の倉庫」ではなく、<br>
+      <span class="highlight">対話による知識の引き出し・構造化・抽象化・手順化の相棒</span>として使う。</p>
+    </div>
+    <div class="slide-number">6 / 15</div>
+  </div>
+
+  <!-- Slide 7: Step1 Messy notes -->
+  <div class="slide">
+    <h2>Step 1：ボサボサメモの作成</h2>
+    <p style="margin-bottom: 16px;">400〜2200文字程度。精度より「思考の生の断片」を出すことが目的。</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>書くべき内容</h3>
+        <ul>
+          <li>実際の場面でどう判断したか</li>
+          <li>教科書では足りないポイント</li>
+          <li>失敗した具体的状況とその後の変化</li>
+          <li>「今の技術で見るとどうか」の対比</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>ポイント</h3>
+        <ul>
+          <li>この段階ではAIを使わない</li>
+          <li>自分の頭から出すことで暗黙知が出やすい</li>
+          <li>「過去」と「今」を両方書くと融合の種になる</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-number">7 / 15</div>
+  </div>
+
+  <!-- Slide 8: Step2 Dialogue -->
+  <div class="slide">
+    <h2>Step 2：AIとの対話による表出化</h2>
+    <p style="margin-bottom: 12px;">推奨対話の型（毎回この順番で進める）</p>
+    <ol style="padding-left: 1.4em; font-size: 1.1rem;">
+      <li style="margin-bottom: 10px;"><strong>抽出</strong>：メモから核となる経験知を引き出す</li>
+      <li style="margin-bottom: 10px;"><strong>役割付与</strong>：AIを「引き出し役」「厳しい若手」「構造化エディター」に</li>
+      <li style="margin-bottom: 10px;"><strong>5層整理</strong>：原則 → 判断基準 → 手順 → 失敗事例 → 他概念との関係</li>
+      <li style="margin-bottom: 10px;"><strong>修正ループ</strong>：「ここは違う」「もっとこの経験を」を繰り返す</li>
+      <li style="margin-bottom: 10px;"><strong>ハイブリッド化</strong>：従来手法とSDDの両方でどう使うかを整理</li>
+    </ol>
+    <div class="slide-number">8 / 15</div>
+  </div>
+
+  <!-- Slide 9: Step3 Externalization -->
+  <div class="slide">
+    <h2>Step 3：4000文字程度の業界知記述</h2>
+    <div class="card">
+      <h3>目指す成果物の性質</h3>
+      <ul>
+        <li>単なる要約ではなく「経験が染み込んだ業界知」</li>
+        <li>抽象度の高い原則と、具体的な判断基準・手順が同居</li>
+        <li>失敗事例と回避策が明示されている</li>
+        <li>他の概念（OOD / DT / 認知工学 / プロセス思考）との関係が示されている</li>
+      </ul>
+    </div>
+    <p class="note">
+      この記述が、後のスライドとSpeaker Notesの「原液」になる。
+    </p>
+    <div class="slide-number">9 / 15</div>
+  </div>
+
+  <!-- Slide 10: Step4 Slides -->
+  <div class="slide">
+    <h2>Step 4：HTMLスライド化（15ページ前後）</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>推奨構成の型</h3>
+        <ul>
+          <li>問題意識・なぜ重要か</li>
+          <li>核心となる考え方</li>
+          <li>具体的な判断基準・パターン</li>
+          <li>実際の進め方・手順</li>
+          <li>よくある失敗と回避</li>
+          <li>他概念との関係</li>
+          <li>まとめ・次の問い</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Speaker Notesの役割</h3>
+        <ul>
+          <li>スライド本文は簡潔に</li>
+          <li>ノートに深い解説・事例・ニュアンスを書く</li>
+          <li>「なぜその判断が重要だったか」を残す</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-number">10 / 15</div>
+  </div>
+
+  <!-- Slide 11: EARS -->
+  <div class="slide">
+    <h2>EARS記法の活用</h2>
+    <p style="margin-bottom: 16px;">仕様を曖昧さなく書き、AIと人間が同じ理解をするための構文</p>
+    <table>
+      <thead>
+        <tr><th>パターン</th><th>キーワード</th><th>用途</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ubiquitous</td><td>なし</td><td>常に成立する原則・制約</td></tr>
+        <tr><td>Event-driven</td><td>When</td><td>特定のトリガーへの応答</td></tr>
+        <tr><td>State-driven</td><td>While</td><td>状態が続いている間の振る舞い</td></tr>
+        <tr><td>Unwanted</td><td>If … then</td><td>エラー・不正状況への対応</td></tr>
+        <tr><td>Optional</td><td>Where</td><td>特定機能が有効な場合のみ</td></tr>
+      </tbody>
+    </table>
+    <p class="note">
+      シニアの「失敗経験」は Unwanted に、「常に守るべき原則」は Ubiquitous に変換すると効果的。
+    </p>
+    <div class="slide-number">11 / 15</div>
+  </div>
+
+  <!-- Slide 12: Traceability -->
+  <div class="slide">
+    <h2>要件の追跡可能性（Traceability）</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>EARSが貢献する点</h3>
+        <ul>
+          <li>曖昧さが低く、1要件＝1応答</li>
+          <li>テストケースと対応させやすい</li>
+          <li>IDを付けて明確に紐付け可能</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>実践の要点</h3>
+        <ul>
+          <li>一意のID（REQ-xxx）を付与</li>
+          <li>上位（ストーリー）↔ 中位（EARS）↔ 下位（テスト）</li>
+          <li>Forward / Backward の双方向追跡</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">
+      追跡を「形式的に満たす」だけでなく、<br>
+      経験知に基づく「意味のある依存関係」を注記として残すことが重要。
+    </p>
+    <div class="slide-number">12 / 15</div>
+  </div>
+
+  <!-- Slide 13: Where senior knowledge shines -->
+  <div class="slide">
+    <h2>シニア知識が特に効くポイント</h2>
+    <ul>
+      <li><strong>エッジケースと失敗パターン</strong>：AIが想像しにくい「現場で本当に起きる状況」</li>
+      <li><strong>認知負荷の管理</strong>：人が理解・操作しやすい設計の感覚</li>
+      <li><strong>業務文脈の深さ</strong>：なぜその要件が必要なのかの「なぜ」</li>
+      <li><strong>判断のヒューリスティック</strong>：「こういうときはこうする」という経験則</li>
+      <li><strong>仕様の過不足の見極め</strong>：書きすぎても足りなくても問題になるポイント</li>
+      <li><strong>他概念との接続</strong>：OOD・DT・プロセス思考を横断した視点</li>
+    </ul>
+    <div class="slide-number">13 / 15</div>
+  </div>
+
+  <!-- Slide 14: Knowledge base -->
+  <div class="slide">
+    <h2>成果物としての知識ベース</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>蓄積の単位</h3>
+        <ul>
+          <li>1テーマ = 1セットのHTMLスライド + Speaker Notes</li>
+          <li>表出化テキスト（4000字程度）を原液として保持</li>
+          <li>関連テーマ間で相互リンク</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>循環の仕組み</h3>
+        <ul>
+          <li>新しいテーマを作るときに既存知識を参照</li>
+          <li>定期的に「穴」と「最新動向との接続」をレビュー</li>
+          <li>必要に応じて英語版・簡易版も展開</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">
+      完成したスライド群は「個人のメモ」を超えた、<br>
+      <span class="highlight">継承可能な業界知</span>として機能する。
+    </p>
+    <div class="slide-number">14 / 15</div>
+  </div>
+
+  <!-- Slide 15: First step & Closing -->
+  <div class="slide">
+    <h2>これから始めるための第一歩</h2>
+    <div class="card">
+      <ol style="padding-left: 1.4em; font-size: 1.15rem;">
+        <li style="margin-bottom: 12px;">全体マップのたたき台を作る（キーワードをとにかく吐き出す）</li>
+        <li style="margin-bottom: 12px;">優先する核テーマを10〜15個リストアップする</li>
+        <li style="margin-bottom: 12px;">最初の1テーマを選び、ボサボサメモを書く</li>
+        <li style="margin-bottom: 12px;">AIとの対話で表出化し、4000字程度の記述を完成させる</li>
+        <li style="margin-bottom: 12px;">HTMLスライド15枚前後に落とし、図解と精査を行う</li>
+      </ol>
+    </div>
+    <p class="note" style="margin-top: 24px;">
+      学習と発信が同じループで回る設計。<br>
+      60歳からのライフワークとして、経験知を次の世代とAIに渡せる形で残す。
+    </p>
+    <div class="slide-number">15 / 15</div>
+  </div>
+
+  <div class="nav">
+    <button onclick="prev()">← 前へ</button>
+    <button onclick="next()">次へ →</button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+    function show(n) {
+      slides[current].classList.remove('active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+    }
+    function next() { show(current + 1); }
+    function prev() { show(current - 1); }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') next();
+      if (e.key === 'ArrowLeft') prev();
+    });
+  </script>
+</body>
+</html>

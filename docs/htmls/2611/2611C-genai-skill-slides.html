@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>生成AIサービスとSKILL活用ガイド</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #a78bfa;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: #334155;
+      --ok: #34d399;
+      --warn: #fbbf24;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+      background: #e2e8f0;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .slide {
+      width: 297mm;
+      min-height: 210mm;
+      max-width: 100%;
+      margin: 16px auto;
+      padding: 28mm 22mm 20mm;
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+      border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.25);
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    .slide-number {
+      position: absolute;
+      bottom: 14mm;
+      right: 18mm;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: 0.6em;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 0.75em;
+      color: #fff;
+      border-left: 4px solid var(--accent);
+      padding-left: 0.55em;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin: 0.9em 0 0.35em;
+    }
+
+    p, li { font-size: 0.98rem; color: #e2e8f0; }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--muted);
+      margin-bottom: 1.2em;
+    }
+
+    .title-slide {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .title-slide h1 {
+      font-size: 2.4rem;
+      background: linear-gradient(90deg, #7dd3fc, #c4b5fd);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    ul { list-style: none; margin: 0.4em 0; }
+    ul li {
+      position: relative;
+      padding-left: 1.25em;
+      margin-bottom: 0.45em;
+    }
+    ul li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1em;
+      margin-top: 0.6em;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.9em;
+      margin-top: 0.6em;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85em 1em;
+    }
+
+    .card strong { color: #7dd3fc; display: block; margin-bottom: 0.25em; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6em;
+      font-size: 0.88rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.45em 0.6em;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: rgba(56, 189, 248, 0.15);
+      color: #7dd3fc;
+      font-weight: 600;
+    }
+    td { color: #e2e8f0; }
+
+    .tag {
+      display: inline-block;
+      padding: 0.15em 0.55em;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(56, 189, 248, 0.2);
+      color: #7dd3fc;
+      margin-right: 0.3em;
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4em;
+      align-items: center;
+      margin: 0.8em 0;
+    }
+    .flow .step {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.45em 0.7em;
+      font-size: 0.85rem;
+    }
+    .flow .arrow { color: var(--accent); font-weight: bold; }
+
+    .note {
+      margin-top: 0.9em;
+      padding: 0.65em 0.9em;
+      background: rgba(167, 139, 250, 0.12);
+      border-left: 3px solid var(--accent2);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      color: #ddd6fe;
+    }
+
+    code {
+      font-family: Consolas, "Cascadia Code", monospace;
+      background: rgba(0,0,0,0.35);
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+      font-size: 0.88em;
+      color: #fde68a;
+    }
+
+    .checklist li::before { content: "☐"; color: var(--ok); }
+
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #111827 !important;
+      }
+
+      .slide {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        width: 100%;
+        min-height: 100vh;
+        page-break-after: always;
+        break-after: page;
+        background: #ffffff !important;
+        color: #111827 !important;
+        border-bottom: 1px solid #d1d5db;
+      }
+
+      .slide::before {
+        background: #0369a1 !important;
+        height: 5px;
+      }
+
+      .slide:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+
+      h1, h2, h3, p, li, td, th, strong, span, div {
+        color: #111827 !important;
+      }
+
+      h1 {
+        color: #0f172a !important;
+      }
+
+      h2 {
+        color: #0f172a !important;
+        border-left-color: #0284c7 !important;
+      }
+
+      h3 {
+        color: #0369a1 !important;
+      }
+
+      p, li {
+        color: #1f2937 !important;
+      }
+
+      .subtitle {
+        color: #374151 !important;
+      }
+
+      .slide-number {
+        color: #4b5563 !important;
+      }
+
+      .title-slide h1 {
+        background: none !important;
+        -webkit-background-clip: border-box !important;
+        background-clip: border-box !important;
+        color: #0c4a6e !important;
+      }
+
+      .card {
+        background: #f8fafc !important;
+        border: 1px solid #94a3b8 !important;
+        color: #111827 !important;
+      }
+
+      .card strong {
+        color: #0c4a6e !important;
+      }
+
+      .tag {
+        background: #e0f2fe !important;
+        color: #0c4a6e !important;
+        border: 1px solid #7dd3fc;
+      }
+
+      .note {
+        background: #f5f3ff !important;
+        border-left-color: #6d28d9 !important;
+        color: #1e1b4b !important;
+      }
+
+      ul li::before {
+        color: #0284c7 !important;
+      }
+
+      .checklist li::before {
+        color: #047857 !important;
+      }
+
+      table th {
+        background: #e0f2fe !important;
+        color: #0c4a6e !important;
+        border-color: #94a3b8 !important;
+      }
+
+      table td {
+        color: #1f2937 !important;
+        border-color: #94a3b8 !important;
+        background: #ffffff !important;
+      }
+
+      table th, table td {
+        border: 1px solid #94a3b8 !important;
+      }
+
+      .flow .step {
+        background: #f1f5f9 !important;
+        border: 1px solid #64748b !important;
+        color: #111827 !important;
+      }
+
+      .flow .arrow {
+        color: #0369a1 !important;
+      }
+
+      code {
+        background: #f3f4f6 !important;
+        color: #9a3412 !important;
+        border: 1px solid #d1d5db;
+      }
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Title -->
+  <section class="slide title-slide">
+    <p class="tag">技術共有資料</p>
+    <h1>生成AIサービスと<br>SKILL活用ガイド</h1>
+    <p class="subtitle">サービス比較・確認ポイント・SKILL設計と運用</p>
+    <p style="color: var(--muted); font-size: 0.95rem;">作業ログ・調査ログを資産化し、自動化と技術発信につなげるための実践整理</p>
+    <div class="slide-number">1 / 15</div>
+  </section>
+
+  <!-- 2. Agenda -->
+  <section class="slide">
+    <h2>アジェンダ</h2>
+    <div class="grid-2">
+      <div class="card">
+        <strong>前半：サービス理解</strong>
+        <ul>
+          <li>生成AIサービスの種類と比較</li>
+          <li>活用時の確認ポイント</li>
+          <li>RPAとの方向性の違い</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>後半：SKILL実践</strong>
+        <ul>
+          <li>SKILLとは何か / 提供形態</li>
+          <li>お勧めSKILLと発見方法</li>
+          <li>自作・運用手順とチェックポイント</li>
+          <li>業務ログからBlog発信までの流れ</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">ゴール：サービス選定とSKILL運用の判断軸を揃え、チームで再現可能な形にすること</p>
+    <div class="slide-number">2 / 15</div>
+  </section>
+
+  <!-- 3. Services overview -->
+  <section class="slide">
+    <h2>生成AIサービスの種類（本会話で扱ったもの）</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>サービス</th>
+          <th>特徴</th>
+          <th>強みの領域</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Grok</strong></td>
+          <td>リアルタイム情報・エージェント実行・SKILL運用</td>
+          <td>手順の再利用、調査と実行の一体運用</td>
+        </tr>
+        <tr>
+          <td><strong>Gemini</strong></td>
+          <td>Google Workspace連携が深い</td>
+          <td>Docs / Sheets / Drive を含む業務フロー</td>
+        </tr>
+        <tr>
+          <td><strong>Claude</strong></td>
+          <td>長文理解・SKILL対応が広い</td>
+          <td>文書推敲、分析、開発支援</td>
+        </tr>
+        <tr>
+          <td><strong>ChatGPT</strong></td>
+          <td>エコシステムが広くスキル移行が進む</td>
+          <td>汎用対話、業務エージェント、開発</td>
+        </tr>
+        <tr>
+          <td><strong>Microsoft Copilot</strong></td>
+          <td>M365・Agent Store・MCP連携</td>
+          <td>社内文書・会議・Office自動化</td>
+        </tr>
+        <tr>
+          <td><strong>Meta Muse</strong></td>
+          <td>タスク実行型パーソナルエージェント</td>
+          <td>予約・連絡・操作の代行（自律実行寄り）</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-number">3 / 15</div>
+  </section>
+
+  <!-- 4. Comparison axis -->
+  <section class="slide">
+    <h2>比較の軸：どう使い分けるか</h2>
+    <div class="grid-2">
+      <div class="card">
+        <strong>SKILL / 手順再利用型</strong>
+        <ul>
+          <li>Grok / Claude / ChatGPT / Gemini / Copilot</li>
+          <li>SKILL.md 等の手順パッケージを持つ</li>
+          <li>「書き方を整備して品質を安定」させる向き</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>自律実行・代行型</strong>
+        <ul>
+          <li>Muse（ゴール渡しで分解実行）</li>
+          <li>手順書より「目的」を渡す運用</li>
+          <li>承認ゲートと権限設計が重要</li>
+        </ul>
+      </div>
+    </div>
+    <h3>共通化のポイント</h3>
+    <ul>
+      <li>主要サービスは <strong>Agent Skills（SKILL.md）系の標準</strong> に寄っており、一度書いた手順を横展開しやすい</li>
+      <li>社内で既に動いているエコシステム（M365 / Google / 開発環境）との接続コストで選定する</li>
+    </ul>
+    <div class="slide-number">4 / 15</div>
+  </section>
+
+  <!-- 5. Checkpoints when using -->
+  <section class="slide">
+    <h2>活用時の確認ポイント</h2>
+    <div class="grid-2">
+      <div class="card">
+        <strong>1. 入力と出力の性質</strong>
+        <ul>
+          <li>非定型テキストか、完全定型か</li>
+          <li>誤り許容度（人がどこを見るか）</li>
+          <li>成果物の形式（JSON / 文書 / 操作実行）</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>2. 実行境界</strong>
+        <ul>
+          <li>クラウドのみか、ローカル操作が必要か</li>
+          <li>PowerShell / Excel / ファイル操作の要否</li>
+          <li>MCP・コネクタ・権限の有無</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>3. ガバナンス</strong>
+        <ul>
+          <li>機密データの扱い</li>
+          <li>承認なし送信・購入の禁止</li>
+          <li>ログと再現性の確保</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>4. 運用継続性</strong>
+        <ul>
+          <li>手順がプロンプト consumable になっていないか</li>
+          <li>SKILL化して資産にできるか</li>
+          <li>他サービスへの移植性</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-number">5 / 15</div>
+  </section>
+
+  <!-- 6. RPA vs GenAI -->
+  <section class="slide">
+    <h2>RPAと生成AIの方向性の違い</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>観点</th>
+          <th>RPA</th>
+          <th>生成AI（SKILL + ツール実行）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>前提</td>
+          <td>完全定型ジョブ</td>
+          <td>非定型・半定型を含む</td>
+        </tr>
+        <tr>
+          <td>入力</td>
+          <td>固定位置・固定形式</td>
+          <td>自然言語・非構造テキスト可</td>
+        </tr>
+        <tr>
+          <td>手順記述</td>
+          <td>厳密なスクリプト</td>
+          <td>自然言語 + 必要時にツール呼出</td>
+        </tr>
+        <tr>
+          <td>例外</td>
+          <td>事前分岐を書き切る</td>
+          <td>モデル判断 + 人が最終確認</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="note">
+      実践的な最適解はハイブリッド。<br>
+      例：生成AIが非定型文から JSON/CSV を生成 → PowerShell → Excel VBA で定型操作を実行。
+    </p>
+    <div class="slide-number">6 / 15</div>
+  </section>
+
+  <!-- 7. What is SKILL -->
+  <section class="slide">
+    <h2>SKILLとは何か</h2>
+    <p style="margin-bottom: 0.7em;">
+      SKILLは、AIへの「保存された手順書」です。その場限りのプロンプトと違い、<strong>再利用・共有・横展開</strong>できます。
+    </p>
+    <div class="grid-2">
+      <div class="card">
+        <strong>プロンプト</strong>
+        <ul>
+          <li>その瞬間の指示</li>
+          <li>会話が終わると消える</li>
+          <li>口頭のお願い</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>SKILL</strong>
+        <ul>
+          <li>ファイルとして残る指示</li>
+          <li>必要なときだけ読み込まれる</li>
+          <li>マニュアル（資産）</li>
+        </ul>
+      </div>
+    </div>
+    <h3>Progressive Disclosure（段階的開示）</h3>
+    <div class="flow">
+      <span class="step">1. name + description（常時）</span>
+      <span class="arrow">→</span>
+      <span class="step">2. SKILL.md 本文（発動時）</span>
+      <span class="arrow">→</span>
+      <span class="step">3. references / scripts（必要時）</span>
+    </div>
+    <p style="color: var(--muted); font-size: 0.9rem;">コンテキストを圧迫せず、スキルを多数持てる設計思想。</p>
+    <div class="slide-number">7 / 15</div>
+  </section>
+
+  <!-- 8. SKILL.md structure -->
+  <section class="slide">
+    <h2>SKILL.md の構造と記述ルール（要点）</h2>
+    <div class="grid-2">
+      <div class="card">
+        <strong>必須構造</strong>
+        <ul>
+          <li><code>---</code> で囲んだ frontmatter</li>
+          <li><code>name</code>（ディレクトリ名と一致）</li>
+          <li><code>description</code>（トリガーの唯一の入口）</li>
+          <li>空でない本文（命令形）</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>description の厳しいルール</strong>
+        <ul>
+          <li>1行・引用符なし</li>
+          <li>最大 1024 文字</li>
+          <li><code>: </code>（コロン+スペース）禁止</li>
+          <li><code>&lt;</code> <code>&gt;</code> 禁止</li>
+          <li>「何を・いつ」を具体語で書く</li>
+        </ul>
+      </div>
+    </div>
+    <h3>書いてはいけないこと</h3>
+    <ul>
+      <li>モデルが既に知っている一般知識の重複</li>
+      <li>トリガー情報を本文だけに書くこと</li>
+      <li>500行超の肥大化（references に逃がす）</li>
+    </ul>
+    <div class="slide-number">8 / 15</div>
+  </section>
+
+  <!-- 9. Recommended skills -->
+  <section class="slide">
+    <h2>お勧めSKILL（共通利用しやすい例）</h2>
+    <div class="grid-2">
+      <div class="card">
+        <strong>文書・オフィス系</strong>
+        <ul>
+          <li><code>doc-coauthoring</code> … 構造化と推敲</li>
+          <li><code>pdf</code> / <code>xlsx</code> / <code>pptx</code></li>
+          <li><code>seo-aeo-blog-writer</code> … 検索・回答エンジン向け最適化</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>思考・開発・発見</strong>
+        <ul>
+          <li><code>grill-me</code> … 深掘り壁打ち</li>
+          <li><code>tdd</code> … テスト先行の強制</li>
+          <li><code>skill-creator</code> … SKILL設計・検証</li>
+          <li><code>find-skills</code> … スキル発見メタ</li>
+        </ul>
+      </div>
+    </div>
+    <h3>業務ログ発信向けに追加で有効</h3>
+    <ul>
+      <li><code>ops-log-miner</code> … 作業・調査ログからネタ抽出</li>
+      <li><code>blog-outline-architect</code> … 読者と見出し設計</li>
+      <li><code>technical-draft-writer</code> … ログ根拠の下書き</li>
+      <li><code>tech-accuracy-checker</code> … 技術的正確性の検証</li>
+    </ul>
+    <div class="slide-number">9 / 15</div>
+  </section>
+
+  <!-- 10. Discovery -->
+  <section class="slide">
+    <h2>SKILLの提供・発見源</h2>
+    <div class="grid-2">
+      <div class="card">
+        <strong>提供のされ方</strong>
+        <ul>
+          <li>各サービスのバンドルSKILL</li>
+          <li>ユーザー作成SKILL（ローカル/組織）</li>
+          <li>Agent Store 等の配布ハブ（Copilot）</li>
+          <li>GitHub の Awesome 系リポジトリ</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>発見に使えるリポジトリ例</strong>
+        <ul>
+          <li>awesome-agent-skills（横断・大規模）</li>
+          <li>gemini-skills / Workspace 特化系</li>
+          <li>品質重視の週次キュレーション系</li>
+          <li>公式 skill-creator / 検証スクリプト</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">
+      方針：まず既存の良質SKILLを探し、不足分だけ自作する。「全部自作」はコストが高い。
+    </p>
+    <div class="slide-number">10 / 15</div>
+  </section>
+
+  <!-- 11. Write your own process -->
+  <section class="slide">
+    <h2>自分でSKILLを書く手順</h2>
+    <div class="flow">
+      <span class="step">1. 具体作業を1つ選ぶ</span>
+      <span class="arrow">→</span>
+      <span class="step">2. 手作業手順をメモ</span>
+      <span class="arrow">→</span>
+      <span class="step">3. 知らない知識だけ抽出</span>
+      <span class="arrow">→</span>
+      <span class="step">4. 最小SKILL.md</span>
+      <span class="arrow">→</span>
+      <span class="step">5. 検証・実戦・改修</span>
+    </div>
+    <div class="grid-2" style="margin-top: 0.8em;">
+      <div class="card">
+        <strong>作る判断</strong>
+        <ul>
+          <li>組織・個人特有の手順 → 作る</li>
+          <li>毎回同じコードを書く → scripts/</li>
+          <li>一般知識だけ → 作らない</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>初期の書き方</strong>
+        <ul>
+          <li>description に発火フレーズを入れる</li>
+          <li>本文は命令形・簡潔</li>
+          <li>長い詳細は references/</li>
+          <li>validate スクリプトで構造確認</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">メタスキル（整理用SKILL）は、実作業SKILLが5〜10個育ってからで十分。</p>
+    <div class="slide-number">11 / 15</div>
+  </section>
+
+  <!-- 12. Operation checkpoints -->
+  <section class="slide">
+    <h2>運用時のチェックポイント</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>観点</th>
+          <th>確認内容</th>
+          <th>アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>利用実績</td>
+          <td>直近で実際に発動したか</td>
+          <td>未使用は削除候補</td>
+        </tr>
+        <tr>
+          <td>トリガー</td>
+          <td>description だけで発動条件が分かるか</td>
+          <td>曖昧なら書き直し</td>
+        </tr>
+        <tr>
+          <td>重複</td>
+          <td>似た目的のSKILLが複数ないか</td>
+          <td>マージ</td>
+        </tr>
+        <tr>
+          <td>肥大化</td>
+          <td>本文が長すぎないか</td>
+          <td>references 分割</td>
+        </tr>
+        <tr>
+          <td>正確性</td>
+          <td>古い手順・危険操作が残っていないか</td>
+          <td>改訂 or 廃止</td>
+        </tr>
+        <tr>
+          <td>移植性</td>
+          <td>他サービスでも使える書き方か</td>
+          <td>標準形式を維持</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 0.7em; color: var(--muted); font-size: 0.9rem;">目安：10個超えたタイミング、または月1回の棚卸し。</p>
+    <div class="slide-number">12 / 15</div>
+  </section>
+
+  <!-- 13. Blog process from logs -->
+  <section class="slide">
+    <h2>業務ログから技術Blogを出すプロセス</h2>
+    <div class="flow">
+      <span class="step">ログ収集</span>
+      <span class="arrow">→</span>
+      <span class="step">ネタ抽出</span>
+      <span class="arrow">→</span>
+      <span class="step">構成設計</span>
+      <span class="arrow">→</span>
+      <span class="step">下書き</span>
+      <span class="arrow">→</span>
+      <span class="step">SEO/AEO</span>
+      <span class="arrow">→</span>
+      <span class="step">技術検証</span>
+      <span class="arrow">→</span>
+      <span class="step">推敲・公開</span>
+    </div>
+    <div class="grid-2" style="margin-top: 0.7em;">
+      <div class="card">
+        <strong>人の関与を固定する箇所</strong>
+        <ul>
+          <li>ネタ選定（公開価値の判断）</li>
+          <li>技術的正確性の最終確認</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>SKILL連鎖の例</strong>
+        <ul>
+          <li>ops-log-miner</li>
+          <li>blog-outline-architect</li>
+          <li>technical-draft-writer</li>
+          <li>seo-aeo-blog-writer</li>
+          <li>tech-accuracy-checker</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">ログ段階で「背景・対応・結果・学び」の型を持たせると、後工程の精度が上がる。</p>
+    <div class="slide-number">13 / 15</div>
+  </section>
+
+  <!-- 14. Master checklist -->
+  <section class="slide">
+    <h2>総合チェックリスト</h2>
+    <div class="grid-2">
+      <div class="card">
+        <strong>サービス選定</strong>
+        <ul class="checklist">
+          <li>既存エコシステムとの接続</li>
+          <li>SKILL / MCP / ローカル実行の要否</li>
+          <li>機密・承認・監査の要件</li>
+          <li>チームでの再利用方針</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>SKILL品質</strong>
+        <ul class="checklist">
+          <li>description が具体的か</li>
+          <li>一般知識を書いていないか</li>
+          <li>実戦で発動・成功したか</li>
+          <li>検証スクリプトを通したか</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>自動化設計</strong>
+        <ul class="checklist">
+          <li>非定型は生成AI、定型はスクリプト/RPA</li>
+          <li>構造化出力（JSON等）の契約が明確か</li>
+          <li>失敗時ログと人の確認点があるか</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>発信・ナレッジ化</strong>
+        <ul class="checklist">
+          <li>ログが記事化可能な粒度か</li>
+          <li>SEO/AEO と技術正確性の両輪</li>
+          <li>過去記事・用語の参照があるか</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-number">14 / 15</div>
+  </section>
+
+  <!-- 15. Summary -->
+  <section class="slide">
+    <h2>まとめと次の一手</h2>
+    <div class="grid-2">
+      <div class="card">
+        <strong>押さえる原則</strong>
+        <ul>
+          <li>サービスは「接続先」と「実行境界」で選ぶ</li>
+          <li>プロンプトを消費せず、SKILLを資産にする</li>
+          <li>非定型理解は生成AI、確実実行はスクリプト/RPA</li>
+          <li>小さく作って実戦で直す</li>
+        </ul>
+      </div>
+      <div class="card">
+        <strong>今週やると良いこと</strong>
+        <ul>
+          <li>繰り返し作業を1つ選び最小SKILL化</li>
+          <li>description と検証を通す</li>
+          <li>既存Awesomeから近いSKILLを1つ導入</li>
+          <li>作業ログの型（背景・対応・結果・学び）を決める</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">
+      完璧な体系は後から見えてくる。まず「1作業・1 SKILL・1回の実戦」から始めるのが最短距離。
+    </p>
+    <div class="slide-number">15 / 15</div>
+  </section>
+
+</body>
+</html>

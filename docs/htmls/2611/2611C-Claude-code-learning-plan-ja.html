@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Code 学習計画 | 講義スライド</title>
+  <style>
+    :root{--ink:#172235;--muted:#536176;--paper:#fbfaf6;--navy:#14233d;--blue:#2463a9;--teal:#1e8b87;--gold:#e6ad42;--line:#d7dce2;--wash:#edf4fa}
+    *{box-sizing:border-box} body{margin:0;background:#cdd5df;color:var(--ink);font-family:"Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;line-height:1.55}
+    .deck{padding:28px 0 74px}.slide{width:min(1120px,calc(100vw - 34px));min-height:630px;margin:0 auto 26px;padding:52px 64px 44px;background:var(--paper);position:relative;overflow:hidden;box-shadow:0 9px 27px #24344a3d;break-after:page;page-break-after:always}
+    .slide::before{content:"";position:absolute;inset:0 auto 0 0;width:11px;background:var(--blue)} .slide::after{content:"Claude Code Learning Plan";position:absolute;right:62px;bottom:17px;font:11px/1.2 Arial,sans-serif;letter-spacing:.12em;color:#7a8796}
+    .cover{background:linear-gradient(125deg,#122540 0%,#1f527f 55%,#147d82 100%);color:#fff;padding:74px 76px}.cover::before{background:var(--gold);width:14px}.cover::after{color:#d9edf4;right:76px;bottom:29px}.cover .rule{width:78px;height:5px;background:var(--gold);margin:34px 0}.cover h1{font-size:53px;line-height:1.25;letter-spacing:.03em;margin:0;font-weight:700}.cover p{font-size:21px;max-width:710px;color:#e1ecf4;margin:0}.cover .meta{position:absolute;left:76px;bottom:45px;color:#d6e2ee;font-size:14px;letter-spacing:.08em}
+    h2{font-size:34px;line-height:1.25;margin:0 0 25px;letter-spacing:.02em}.kicker{font:700 13px/1 Arial,sans-serif;letter-spacing:.13em;color:var(--blue);margin:0 0 11px}.lead{font-size:20px;color:#334154;margin:0 0 24px;max-width:900px}.page{position:absolute;right:64px;top:56px;font:700 14px Arial;color:#758195}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.box{border-top:4px solid var(--blue);background:#f1f5f8;padding:18px 20px}.box h3{margin:0 0 9px;font-size:20px}.box p,.box li{margin:0;color:#3c4a5d;font-size:16px}.box ul{padding-left:1.2em;margin:8px 0 0}.note{border-left:5px solid var(--gold);padding:11px 16px;background:#fff5dd;font-weight:600;margin-top:20px}.phase{display:grid;grid-template-columns:110px 1fr;gap:20px;align-items:center;border-bottom:1px solid var(--line);padding:14px 0}.phase:last-child{border-bottom:0}.phase .num{font:700 35px Georgia;color:var(--blue)}.phase h3{margin:0;font-size:20px}.phase p{margin:2px 0 0;color:var(--muted)}
+    .flow{display:flex;align-items:stretch;gap:0;margin:26px 0}.flow div{flex:1;padding:18px 14px;background:#e6eef5;text-align:center;font-weight:700;border-right:3px solid var(--paper);font-size:17px}.flow div:nth-child(even){background:#d5e9e9}.flow div:last-child{background:#fff0d1;border:0}.matrix{display:grid;grid-template-columns:145px 1fr 1fr;gap:1px;background:var(--line);font-size:15px}.matrix>div{background:var(--paper);padding:13px}.matrix .head{background:var(--navy);color:#fff;font-weight:700}.matrix .label{background:#edf3f7;font-weight:700}.roadmap{counter-reset:road}.level{position:relative;padding:13px 14px 13px 68px;background:#f0f5f8;border-left:4px solid var(--blue);min-height:84px}.level::before{counter-increment:road;content:counter(road);position:absolute;left:18px;top:15px;width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;line-height:32px;font-weight:700}.level:nth-child(2){border-color:#2b8e8a}.level:nth-child(2)::before{background:#2b8e8a}.level:nth-child(3){border-color:#b58228}.level:nth-child(3)::before{background:#b58228}.level h3{margin:0;font-size:18px}.level p{margin:2px 0 0;font-size:15px;color:var(--muted)}
+    .check{font-size:17px;margin:10px 0;padding-left:26px;position:relative}.check::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:700}.quote{font:600 26px/1.55 "Yu Mincho",serif;border-left:7px solid var(--gold);padding-left:25px;margin:46px 0 25px;max-width:900px}.small{font-size:14px;color:var(--muted)}
+    .controls{position:fixed;right:22px;bottom:18px;display:flex;gap:8px;z-index:2}.controls button{border:0;border-radius:3px;background:var(--navy);color:#fff;padding:10px 14px;cursor:pointer;font-size:14px}.controls button:hover{background:var(--blue)}
+    @media print{
+      @page{size:A4 landscape;margin:0}
+      html,body{margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+      .deck{padding:0!important;margin:0!important}
+      .slide{width:297mm!important;height:210mm!important;min-height:210mm!important;margin:0!important;padding:17mm 20mm 14mm!important;box-shadow:none!important;overflow:hidden!important;break-before:page;page-break-before:always;break-after:page;page-break-after:always;break-inside:avoid;page-break-inside:avoid;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color:var(--ink)!important}
+      .slide:first-child{break-before:auto;page-break-before:auto}
+      .slide:last-child{break-after:auto;page-break-after:auto}
+      .slide::after{right:20mm;bottom:7mm;color:#334154!important}
+      .slide .page{right:20mm;top:17mm;color:#334154!important}
+      .cover{padding:29mm 24mm!important;color:#fff!important;background:linear-gradient(125deg,#122540 0%,#1f527f 55%,#147d82 100%)!important}
+      .cover h1,.cover p,.cover .meta{color:#fff!important}
+      .cover .kicker{color:#ffd778!important}
+      .cover .meta{left:24mm;bottom:17mm}
+      .cover::after{right:24mm;bottom:9mm;color:#fff!important}
+      .controls{display:none!important}
+      h2{font-size:29pt;color:#172235!important}
+      h3,p,li,.lead,.small,.phase p,.level p,.box p,.box li{color:#26364b!important}
+      .lead{font-size:17pt}
+      .box p,.box li{font-size:12.5pt}
+      .kicker,.phase .num{color:#174f8b!important}
+      .matrix .head{background:#14233d!important;color:#fff!important}
+      .matrix .label{background:#e2ebf2!important;color:#172235!important}
+      .box,.level,.flow div,.note{filter:none!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+    }
+  </style>
+</head>
+<body>
+<main class="deck">
+  <section class="slide cover" id="s1"><p class="kicker" style="color:#f7cd74">LECTURE SLIDES / 2026</p><h1>Claude Code<br>学習計画</h1><div class="rule"></div><p>AI Codingを理解し、日々の開発に安全に組み込むための実践ロードマップ</p><p class="meta">対象：ソフトウェア開発者、テックリード、開発チーム</p></section>
+
+  <section class="slide" id="s2"><span class="page">02</span><p class="kicker">1. BACKGROUND</p><h2>AI Codingが変える開発の仕事</h2><p class="lead">コード生成の普及により、開発者の中心的な仕事は「一行ずつ書く」ことから、「意図・制約・検証を設計する」ことへ広がります。</p><div class="flow"><div>コード補完<br><span class="small">入力を支援</span></div><div>コード生成<br><span class="small">まとまった実装を作る</span></div><div>Agentic Coding<br><span class="small">調査・変更・検証を反復</span></div></div><div class="grid2"><div class="box"><h3>AIが得意な領域</h3><p>構文、定型実装、横断的な変更、テストのたたき台、調査の要約。</p></div><div class="box"><h3>人が担う領域</h3><p>事業判断、品質基準、例外の扱い、設計上の優先順位、最終承認。</p></div></div></section>
+
+  <section class="slide" id="s3"><span class="page">03</span><p class="kicker">2. MENTAL MODEL</p><h2>Claude Codeの基本像</h2><p class="lead">Claude Codeは、リポジトリと開発環境を文脈として利用し、指示に沿って調査・計画・実装・検証を進めるCLI型のコーディングエージェントです。</p><div class="grid3"><div class="box"><h3>モデル</h3><p>自然言語の依頼を解釈し、コードと資料から候補を推論する。</p></div><div class="box"><h3>ツール</h3><p>ファイル、検索、コマンド、Git、外部サービスを操作して仕事を進める。</p></div><div class="box"><h3>ガードレール</h3><p>権限、ルール、レビュー、テストで安全性と再現性を確保する。</p></div></div><div class="note">重要：優れた出力は、モデルの能力だけでなく、渡す文脈と検証の設計で決まります。</div></section>
+
+  <section class="slide" id="s4"><span class="page">04</span><p class="kicker">3. AGENTIC LOOP</p><h2>エージェントが仕事を進めるループ</h2><p class="lead">一度の生成で終わらせず、観察と検証を次の行動に反映するループとして捉えます。</p><div class="flow"><div>理解<br><span class="small">依頼・制約を読む</span></div><div>調査<br><span class="small">コードと履歴を確認</span></div><div>計画<br><span class="small">変更範囲を決める</span></div><div>実装<br><span class="small">小さく変更する</span></div><div>検証<br><span class="small">テスト・差分を確認</span></div></div><div class="grid2"><div><h3>良い依頼の材料</h3><p>目的、対象範囲、受け入れ条件、触れてはいけない箇所、実行してよい検証。</p></div><div><h3>ループの終了条件</h3><p>テストが通るだけでは足りません。要件、差分、セキュリティ、運用影響を人が確認します。</p></div></div></section>
+
+  <section class="slide" id="s5"><span class="page">05</span><p class="kicker">4. FEATURE MAP</p><h2>機能群を「文脈・実行・拡張・統制」で整理する</h2><div class="matrix"><div class="head">機能群</div><div class="head">主な要素</div><div class="head">学ぶ目的</div><div class="label">文脈</div><div>CLAUDE.md、Rules、Memory、Context</div><div>プロジェクトの知識と作法を、毎回ぶれずに渡す</div><div class="label">実行</div><div>Plan Mode、Skills、Subagents、Agent Teams</div><div>大きな仕事を分解し、計画と役割に沿って進める</div><div class="label">拡張</div><div>MCP、Plugins、Hooks</div><div>社内ツールや外部サービスとの接続を設計する</div><div class="label">統制</div><div>Permissions、Testing、Git</div><div>実行権限、検証、レビュー可能な変更を管理する</div></div><div class="note">学習の順番は「便利そうな連携」より先に、「安全に再現できる基本運用」です。</div></section>
+
+  <section class="slide" id="s6"><span class="page">06</span><p class="kicker">5. CONTEXT</p><h2>文脈を設計する：CLAUDE.md・Rules・Memory</h2><div class="grid2"><div class="box"><h3>CLAUDE.md</h3><p>リポジトリで共有したい恒久的な前提を置く場所です。構成、起動方法、品質基準、禁止事項を短く明確に書きます。</p></div><div class="box"><h3>Rules</h3><p>特定の領域や作業に適用する決まりです。例：API変更時の互換性、UI変更時の確認観点。</p></div><div class="box"><h3>Memory と Context</h3><p>会話の流れや読み込んだ情報を活用します。必要な情報だけを渡し、古い前提を残さないことが重要です。</p></div><div class="box"><h3>最初の改善</h3><p>「どのコマンドで検証するか」と「変更してよい範囲」を明文化します。これは失敗を減らす効果が大きい一歩です。</p></div></div></section>
+
+  <section class="slide" id="s7"><span class="page">07</span><p class="kicker">6. EXECUTION</p><h2>Plan Mode・Skills・Subagents</h2><div class="grid3"><div class="box"><h3>Plan Mode</h3><p>実装前に、調査結果、変更案、リスク、検証方法を整理します。未知の変更ほど先に計画を読みます。</p></div><div class="box"><h3>Skills</h3><p>作業手順や専門知識を再利用する単位です。例：リリース手順、レビュー観点、社内APIの扱い。</p></div><div class="box"><h3>Subagents / Teams</h3><p>調査、実装、テストの役割を分けて並行化します。統合責任と最終レビューは人が明確に持ちます。</p></div></div><div class="note">分割の基準：互いの編集範囲が重ならず、成果物の受け渡し条件を言語化できる仕事。</div></section>
+
+  <section class="slide" id="s8"><span class="page">08</span><p class="kicker">7. INTEGRATION &amp; SAFETY</p><h2>MCP・Plugins・Hooks・Permissions</h2><div class="grid2"><div><div class="phase"><div class="num">MCP</div><div><h3>外部ツールとの接続</h3><p>チケット、設計資料、データ、社内サービスを、定義したインターフェース経由で利用します。</p></div></div><div class="phase"><div class="num">Plugin</div><div><h3>機能の追加</h3><p>特定の開発環境やサービス向けの能力を導入します。信頼できる提供元と権限を確認します。</p></div></div></div><div><div class="phase"><div class="num">Hook</div><div><h3>イベント時の自動処理</h3><p>実装前後や終了時に、整形、静的解析、記録などを組み込みます。</p></div></div><div class="phase"><div class="num">Perm.</div><div><h3>実行権限の管理</h3><p>読み取り、編集、コマンド、外部アクセスを分けます。最小権限と確認可能なログを基本にします。</p></div></div></div></div><div class="note">外部接続は「何ができるか」よりも先に、「何を読めるか・書けるか・実行できるか」を確認します。</div></section>
+
+  <section class="slide" id="s9"><span class="page">09</span><p class="kicker">8. SDLC &amp; TDD</p><h2>SDLCに組み込むAI協業</h2><div class="flow"><div>要件<br><span class="small">曖昧さ・受入条件を整理</span></div><div>設計<br><span class="small">選択肢と影響を比較</span></div><div>実装<br><span class="small">小さい差分を作成</span></div><div>テスト<br><span class="small">失敗から修正を反復</span></div><div>レビュー／配布<br><span class="small">人が判断し履歴を残す</span></div></div><div class="grid2"><div class="box"><h3>TDDの使い方</h3><p>先に期待動作をテストとして表現します。AIには、失敗するテストの原因分析と、最小の修正案を依頼します。</p></div><div class="box"><h3>Gitの使い方</h3><p>目的が一つの変更に絞られた差分を残します。AIの変更も、通常のレビューと同じ基準で確認します。</p></div></div></section>
+
+  <section class="slide" id="s10"><span class="page">10</span><p class="kicker">9. COLLABORATION</p><h2>人とAIの役割分担</h2><div class="matrix"><div class="head">場面</div><div class="head">AIが支援すること</div><div class="head">人が責任を持つこと</div><div class="label">問題設定</div><div>関連コード、過去の実装、論点を集める</div><div>目的、優先順位、成功の定義を決める</div><div class="label">設計</div><div>案と影響範囲を比較し、下書きを作る</div><div>トレードオフとアーキテクチャを決める</div><div class="label">実装・検証</div><div>コード、テスト、修正候補を反復する</div><div>品質、セキュリティ、例外を承認する</div><div class="label">学習・改善</div><div>手順を記録し、再利用候補を見つける</div><div>ルールとチームの運用を更新する</div></div></section>
+
+  <section class="slide" id="s11"><span class="page">11</span><p class="kicker">10. ROADMAP</p><h2>五段階の学習ロードマップ</h2><div class="roadmap"><div class="level"><h3>対話と安全な編集</h3><p>小さな修正を依頼し、差分を読み、テストを自分で実行する。</p></div><div class="level"><h3>文脈と検証の標準化</h3><p>CLAUDE.mdとRulesを整え、プロジェクトの起動・検証手順を固定する。</p></div><div class="level"><h3>計画とTDDの反復</h3><p>Plan Modeで変更計画を確認し、テストを先に置いて実装を進める。</p></div><div class="level"><h3>拡張と自動化</h3><p>Skills、Hooks、MCPを小さく導入し、権限とログを確認する。</p></div><div class="level"><h3>チーム運用</h3><p>レビュー基準、役割分担、指標を整え、再現できる開発プロセスへ育てる。</p></div></div></section>
+
+  <section class="slide" id="s12"><span class="page">12</span><p class="kicker">11. MINI PROJECT</p><h2>最初の実践：小さな機能追加</h2><p class="lead">例：既存のToDoアプリに「完了済みを隠す」切り替えを追加する。</p><div class="grid2"><div><div class="check">対象の画面、状態管理、テストの場所を調査する</div><div class="check">表示条件と受け入れ条件を、短い仕様として確認する</div><div class="check">Plan Modeで変更ファイルとテスト方針を先に確認する</div></div><div><div class="check">失敗するテストを追加し、最小限の実装を依頼する</div><div class="check">テスト、Lint、画面確認を実行して差分をレビューする</div><div class="check">学んだ起動手順・注意点をCLAUDE.mdへ反映する</div></div></div><div class="note">完了条件：機能が動くことに加え、変更理由・検証結果・次回への学びを説明できること。</div></section>
+
+  <section class="slide" id="s13"><span class="page">13</span><p class="kicker">12. TAKEAWAYS</p><h2>学習の要点</h2><p class="quote">「AIに実装を任せる」学習ではなく、<br>「AIが正しく働ける開発環境を設計する」学習です。</p><div class="grid3"><div class="box"><h3>文脈</h3><p>暗黙知を短いルールに変え、必要な情報だけを渡す。</p></div><div class="box"><h3>検証</h3><p>テストとレビューを、生成後ではなく作業の中心に置く。</p></div><div class="box"><h3>段階導入</h3><p>小さな変更から始め、実績を基に自動化と連携を広げる。</p></div></div><p class="small" style="margin-top:32px">次の一歩：担当リポジトリを一つ選び、起動・検証・変更禁止領域をCLAUDE.mdに書き出す。</p></section>
+</main>
+<nav class="controls" aria-label="スライド操作"><button onclick="go(-1)">← 前へ</button><button onclick="go(1)">次へ →</button><button onclick="window.print()">印刷</button></nav>
+<script>let i=0;const slides=[...document.querySelectorAll('.slide')];function go(n){i=Math.max(0,Math.min(slides.length-1,i+n));slides[i].scrollIntoView({behavior:'smooth',block:'center'})}document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown')go(1);if(e.key==='ArrowLeft'||e.key==='PageUp')go(-1)});</script>
+</body></html>

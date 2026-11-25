@@ -73,22 +73,45 @@
 
     /* 印刷時の最適化 */
     @media print {
-      body {
+      @page { size: landscape; margin: 8mm; }
+      html, body {
         background: #FFFFFF !important;
+        color: #0F172A !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
-      header, #single-controls, #slide-dots, .no-print {
-        display: none !important;
+      header, #single-controls, #slide-dots, .no-print { display: none !important; }
+      #slides-container {
+        display: block !important;
+        max-width: none !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
       }
       .slide-card {
         display: flex !important;
         opacity: 1 !important;
         transform: none !important;
         box-shadow: none !important;
-        border: 1px solid #CBD5E1 !important;
-        page-break-after: always;
-        break-after: page;
-        margin: 0 0 1.5rem 0 !important;
-        min-height: auto !important;
+        border: 1px solid #94A3B8 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid-page !important;
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+      .slide-card:last-child { page-break-after: auto !important; break-after: auto !important; }
+      /* Light text is darkened for clear paper/PDF output. */
+      .text-slate-300, .text-slate-400, .text-slate-500, .text-slate-600,
+      .text-indigo-200, .text-indigo-300, .text-teal-300,
+      .text-amber-300, .text-sky-300, .text-emerald-400 { color: #334155 !important; }
+      /* Retain strong foreground/background color reproduction when printing. */
+      .slide-card, .slide-card *, .slide-card svg * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
     }
 
